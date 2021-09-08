@@ -52,45 +52,47 @@
 % Слайд вентиль
 \begin{frame}{Цифровой логический уровень}
     \begin{itemize}
-        \pause
-        \item Вентиль на базе электромагнитного реле
-        \pause
-        \begin{spacing}{0.8}
-        \item
-        \begin{small}
-        Под действием силы, которая возникает в катушке при появлении
-        сигнала на входе, верхняя пластина смещается и замыкает выходную цепь.
-        Входное напряжение может быть малым, а выходное~--- большим.
-        \end{small}
-        \item
-        \begin{small}
-        Если в качестве выхода использовать верхний контакт, то получим
-        двухпозиционное реле (double-throw). У него два электрически
-        противоположных выхода: когда на одном есть напряжение, на другом
-        его нет.
-        \end{small}
-        \end{spacing}
-        \pause
+        \onslide<1->
+            \item Вентиль на базе электромагнитного реле
+        \begin{spacing}{0.7}
+        \onslide<2->
+            \item
+            \begin{footnotesize}
+            Под действием силы, которая возникает в катушке при появлении
+            сигнала на входе, верхняя пластина смещается и замыкает выходную цепь.
+            Входное напряжение может быть малым, а выходное~--- большим.
+            \end{footnotesize}
+        \onslide<3->
+            \item
+            \begin{footnotesize}
+            Если в качестве выхода использовать верхний контакт, то получим
+            двухпозиционное реле (double-throw). У него два электрически
+            противоположных выхода: когда на одном есть напряжение, на другом
+            его нет.
+            \end{footnotesize}
         \begin{columns}[T,onlytextwidth]
             \begin{column}{0.5\textwidth}
+                \onslide<1->
                 \begin{figure}[htp]
                     \centering
-                    \includegraphics[height=3.2cm,keepaspectratio]{ReleOff.png}
+                    \includegraphics[height=3cm,keepaspectratio]{ReleOff.png}
+                    \captionsetup{skip=-5pt}
                     \caption{\tiny{реле разомкнуто, на выходе сигнала нет}}
                     \label{fig:ReleOff}
                 \end{figure}
             \end{column}
             \begin{column}{0.5\textwidth}
+                \onslide<2->
                 \begin{figure}[htp]
                     \centering
-                    \includegraphics[height=3.2cm, keepaspectratio]{ReleOn.png}
+                    \includegraphics[height=3cm, keepaspectratio]{ReleOn.png}
+                    \captionsetup{skip=-5pt}
                     \caption{\tiny{реле замкнуто, на выходе есть сигнал}}
                     \label{fig:ReleOn}
                 \end{figure}
             \end{column}
         \end{columns}
-            \pause
-        \item Вентиль~--- электронное устройство, которое может вычислять различные функции от двузначных сигналов, преобразуя соответствующим образом входные сигналы в выходной логический сигнал.
+        \end{spacing}
     \end{itemize}
 \end{frame}
 
@@ -135,7 +137,7 @@
             \begin{figure}[htp]
                 \centering
                 \includegraphics[height=3.5cm, keepaspectratio]{ReleDTParallel.png}
-                \caption{\tiny{последовательное подключение двух реле}}
+                \caption{\tiny{параллельное подключение двух реле}}
                 \label{fig:ReleDTParallel}
             \end{figure}
         \end{column}
@@ -261,7 +263,9 @@
 % Слайд Суммирование
 \begin{frame}{Цифровой логический уровень}
     \begin{itemize}
+        \onslide<1->
         \item Суммирование
+        \onslide<2->
         \begin{columns}[T,onlytextwidth]
             \begin{column}{0.5\textwidth}
                 \begin{table}
@@ -275,6 +279,7 @@
                 \end{table}
             \end{column}
             \begin{column}{0.5\textwidth}
+                \onslide<3->
                 \begin{figure}[htp]
                     \centering
                     \includegraphics[height=0.8cm, keepaspectratio]{GateExclOR.png}
@@ -282,8 +287,9 @@
                 \end{figure}
             \end{column}
         \end{columns}
-
+        \onslide<4->
         \item Перенос
+        \onslide<5->
         \begin{columns}[T,onlytextwidth]
             \begin{column}{0.5\textwidth}
                 \begin{table}
@@ -297,6 +303,7 @@
                 \end{table}
             \end{column}
             \begin{column}{0.5\textwidth}
+                \onslide<6->
                 \begin{figure}[htp]
                     \centering
                     \includegraphics[height=0.8cm, keepaspectratio]{GateAND.png}
@@ -432,7 +439,7 @@
                 \centering
                 \includegraphics[height=2.8cm, keepaspectratio]{MultiplexorScheme.png}
                 \captionsetup{skip=-5pt}
-                \caption{\tiny{Mультиплексор}}
+                \caption{\tiny{Работа мультиплексора}}
             \end{figure}
             \begin{figure}
                 \centering
