@@ -1,0 +1,661 @@
+\documentclass[aspectratio=169,14pt]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[main=russian,english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[labelformat=empty]{caption}
+\usepackage{multimedia}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{setspace}
+
+\usetheme{Singapore}
+
+\definecolor{urlcolor}{HTML}{799B03} % цвет гиперссылок
+\hypersetup{urlcolor=urlcolor, colorlinks=true}
+
+\graphicspath{{../Images/}}
+
+\title{Цифровой логический уровень}
+
+\begin{document}
+
+% Слайд цифровая схема, вентиль
+\begin{frame}{Цифровой логический уровень}
+    \begin{itemize}
+        \pause
+        \item Цифровая схема~--- схема, в которой есть только два логических значения сигнала.
+        \pause
+        \begin{columns}[T,onlytextwidth]
+            \begin{column}{0.5\textwidth}
+                \begin{figure}[htp]
+                    \centering
+                    \includegraphics[width=4cm,keepaspectratio]{AnalogSignal.png}
+                    \caption{\tiny{аналоговый сигнал}}
+                    \label{fig:AnalogSignal}
+                \end{figure}
+            \end{column}
+            \begin{column}{0.5\textwidth}
+                \begin{figure}[htp]
+                    \centering
+                    \includegraphics[width=4cm, keepaspectratio]{DigitalSignal.png}
+                    \caption{\tiny{цифровой сигнал}}
+                    \label{fig:DigitalSignal}
+                \end{figure}
+            \end{column}
+        \end{columns}
+            \pause
+        \item Вентиль~--- электронное устройство, которое может вычислять различные функции от двузначных сигналов, преобразуя соответствующим образом входные сигналы в выходной логический сигнал.
+    \end{itemize}
+\end{frame}
+
+% Слайд вентиль
+\begin{frame}{Цифровой логический уровень}
+    \begin{itemize}
+        \pause
+        \item Вентиль на базе электромагнитного реле
+        \pause
+        \begin{spacing}{0.8}
+        \item
+        \begin{small}
+        Под действием силы, которая возникает в катушке при появлении
+        сигнала на входе, верхняя пластина смещается и замыкает выходную цепь.
+        Входное напряжение может быть малым, а выходное~--- большим.
+        \end{small}
+        \item
+        \begin{small}
+        Если в качестве выхода использовать верхний контакт, то получим
+        двухпозиционное реле (double-throw). У него два электрически
+        противоположных выхода: когда на одном есть напряжение, на другом
+        его нет.
+        \end{small}
+        \end{spacing}
+        \pause
+        \begin{columns}[T,onlytextwidth]
+            \begin{column}{0.5\textwidth}
+                \begin{figure}[htp]
+                    \centering
+                    \includegraphics[height=3.2cm,keepaspectratio]{ReleOff.png}
+                    \caption{\tiny{реле разомкнуто, на выходе сигнала нет}}
+                    \label{fig:ReleOff}
+                \end{figure}
+            \end{column}
+            \begin{column}{0.5\textwidth}
+                \begin{figure}[htp]
+                    \centering
+                    \includegraphics[height=3.2cm, keepaspectratio]{ReleOn.png}
+                    \caption{\tiny{реле замкнуто, на выходе есть сигнал}}
+                    \label{fig:ReleOn}
+                \end{figure}
+            \end{column}
+        \end{columns}
+            \pause
+        \item Вентиль~--- электронное устройство, которое может вычислять различные функции от двузначных сигналов, преобразуя соответствующим образом входные сигналы в выходной логический сигнал.
+    \end{itemize}
+\end{frame}
+
+% Слайд вентиль И
+\begin{frame}{Цифровой логический уровень}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.5\textwidth}
+            \begin{itemize}
+                \item Вентиль <<И>> (AND)
+                \item Реализуется при подключении двух реле последовательно
+                \item Вычисляет элементарную логическую функцию <<И>>
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{figure}[htp]
+                \centering
+                \includegraphics[height=3.5cm, keepaspectratio]{ReleDTSerial.png}
+                \caption{\tiny{последовательное подключение двух реле}}
+                \label{fig:ReleDTSerial}
+            \end{figure}
+        \end{column}
+    \end{columns}
+    \begin{figure}[htp]
+        \centering
+        \includegraphics[height=1.2cm,keepaspectratio]{GateAND.png}
+        \caption{\tiny{изображение вентиля <<И>> на схеме}}
+        \label{fig:GateAND}
+    \end{figure}
+\end{frame}
+
+% Слайд вентиль ИЛИ
+\begin{frame}{Цифровой логический уровень}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.5\textwidth}
+            \begin{itemize}
+                \item Вентиль <<ИЛИ>> (OR)
+                \item Реализуется при подключении двух реле параллельно
+                \item Вычисляет элементарную логическую функцию <<ИЛИ>>
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{figure}[htp]
+                \centering
+                \includegraphics[height=3.5cm, keepaspectratio]{ReleDTParallel.png}
+                \caption{\tiny{последовательное подключение двух реле}}
+                \label{fig:ReleDTParallel}
+            \end{figure}
+        \end{column}
+    \end{columns}
+    \begin{figure}[htp]
+        \centering
+        \includegraphics[height=1.2cm,keepaspectratio]{GateOR.png}
+        \caption{\tiny{изображение вентиля <<ИЛИ>> на схеме}}
+        \label{fig:GateOR}
+    \end{figure}
+\end{frame}
+
+% Слайд Инвертор, ИЛИ-НЕ, И-НЕ, исключающее ИЛИ
+\begin{frame}{Цифровой логический уровень}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.5\textwidth}
+            \begin{itemize}
+                \item Одно двухпозиционное реле является инвертором, который меняет сигнал на противоположный
+                \item Вентиль <<ИЛИ-НЕ>> (NOR)
+                \item Вентиль <<И-НЕ>> (NAND)
+                \item Вентиль <<Исключающее ИЛИ>> (Exclusive OR)
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{figure}[htp]
+                \vspace{-25pt}
+                \centering
+                \includegraphics[height=0.8cm, keepaspectratio]{Inverter.png}
+                \captionsetup{skip=0pt}
+                \caption{\tiny{инвертор}}
+                \label{fig:Inverter}
+            \end{figure}
+            \begin{figure}[htp]
+                \vspace{-25pt}
+                \centering
+                \includegraphics[height=0.8cm, keepaspectratio]{GateNOR.png}
+                \caption{\tiny{<<ИЛИ-НЕ>>}}
+                \label{fig:GateNOR}
+            \end{figure}
+            \begin{figure}[htp]
+                \vspace{-25pt}
+                \centering
+                \includegraphics[height=0.8cm, keepaspectratio]{GateNAND.png}
+                \caption{\tiny{<<И-НЕ>>}}
+                \label{fig:GateNAND}
+            \end{figure}
+            \begin{figure}[htp]
+                \vspace{-25pt}
+                \centering
+                \includegraphics[height=0.8cm, keepaspectratio]{GateExclOR.png}
+                \caption{\tiny{<<Исключающее ИЛИ>>}}
+                \label{fig:GateExclOR}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд Шеннон
+\begin{frame}{Цифровой логический уровень}
+    \begin{itemize}
+        \item Впервые идею об использовании электрических устройств для вычисления
+        логических выражений предложил Клод Шеннон (1937~год)
+        \item Таблицы истинности вентилей
+        \begin{small}
+        \begin{columns}[T,onlytextwidth]
+            \begin{column}{0.3\textwidth}
+                \begin{table}
+                    \centering
+                    \begin{tabular}{c|cc}
+                        \textbf{<<И>>} & 0 & 1 \\ \hline
+                        0 & 0 & 0 \\
+                        1 & 0 & 1
+                    \end{tabular}
+                \end{table}
+            \end{column}
+            \begin{column}{0.3\textwidth}
+                \begin{table}
+                    \centering
+                    \begin{tabular}{c|cc}
+                        \textbf{<<ИЛИ>>} & 0 & 1 \\ \hline
+                        0 & 0 & 1 \\
+                        1 & 1 & 1
+                    \end{tabular}
+                \end{table}
+            \end{column}
+            \begin{column}{0.3\textwidth}
+                \begin{table}
+                    \centering
+                    \begin{tabular}{c|cc}
+                        \textbf{<<ИЛИ-НЕ>>} & 0 & 1 \\ \hline
+                        0 & 1 & 0 \\
+                        1 & 0 & 0
+                    \end{tabular}
+                \end{table}
+            \end{column}
+        \end{columns}
+        \begin{columns}[T,onlytextwidth]
+            \begin{column}{0.5\textwidth}
+                \begin{table}
+                    \centering
+                    \begin{tabular}{c|cc}
+                        \textbf{<<И-НЕ>>} & 0 & 1 \\ \hline
+                        0 & 1 & 1 \\
+                        1 & 1 & 0
+                    \end{tabular}
+                \end{table}
+            \end{column}
+            \begin{column}{0.5\textwidth}
+                \begin{table}
+                    \centering
+                    \begin{tabular}{c|cc}
+                        \textbf{<<Исключающее или>>} & 0 & 1 \\ \hline
+                        0 & 0 & 1 \\
+                        1 & 1 & 0
+                    \end{tabular}
+                \end{table}
+            \end{column}
+        \end{columns}
+        \end{small}
+    \end{itemize}
+\end{frame}
+
+% Слайд Суммирование
+\begin{frame}{Цифровой логический уровень}
+    \begin{itemize}
+        \item Суммирование
+        \begin{columns}[T,onlytextwidth]
+            \begin{column}{0.5\textwidth}
+                \begin{table}
+                    \centering
+                    \begin{tabular}{c|cc}
+                        \textbf{<<+>>} & 0 & 1 \\ \hline
+                        0 & 0 & 1 \\
+                        1 & 1 & 0
+                    \end{tabular}
+                    \caption{\tiny{Таблица истинности для сложения однобитных чисел}}
+                \end{table}
+            \end{column}
+            \begin{column}{0.5\textwidth}
+                \begin{figure}[htp]
+                    \centering
+                    \includegraphics[height=0.8cm, keepaspectratio]{GateExclOR.png}
+                    \caption{\tiny{Реализуется вентилем <<Исключающее ИЛИ>>}}
+                \end{figure}
+            \end{column}
+        \end{columns}
+
+        \item Перенос
+        \begin{columns}[T,onlytextwidth]
+            \begin{column}{0.5\textwidth}
+                \begin{table}
+                    \centering
+                    \begin{tabular}{c|cc}
+                        \textbf{<<+>>} & 0 & 1 \\ \hline
+                        0 & 0 & 0 \\
+                        1 & 0 & 1
+                    \end{tabular}
+                    \caption{\tiny{Таблица истинности для операции переноса}}
+                \end{table}
+            \end{column}
+            \begin{column}{0.5\textwidth}
+                \begin{figure}[htp]
+                    \centering
+                    \includegraphics[height=0.8cm, keepaspectratio]{GateAND.png}
+                    \caption{\tiny{Реализуется вентилем <<И>>}}
+                \end{figure}
+            \end{column}
+        \end{columns}
+    \end{itemize}
+\end{frame}
+
+% Слайд полусумматор
+\begin{frame}{Цифровой логический уровень}
+    \begin{itemize}
+        \item Объединив два вентиля, получим сумматор одноразрядных двоичных чисел. Такая схема называется
+        полусумматором, так как не может использоваться для сложения многоразрядных чисел потому
+        что не учитывает возможный перенос от предыдущего разряда.
+        \begin{columns}[T,onlytextwidth]
+            \begin{column}{0.5\textwidth}
+                \begin{figure}[htp]
+                    \centering
+                    \includegraphics[height=2.2cm, keepaspectratio]{HalfAdder1bit.png}
+                    \caption{\tiny{Полусумматор на основе вентилей <<Исключающее ИЛИ>> и <<И>> }}
+                \end{figure}
+            \end{column}
+            \begin{column}{0.5\textwidth}
+                \begin{figure}[htp]
+                    \centering
+                    \includegraphics[height=2.2cm, keepaspectratio]{HalfAdder1bitQuad.png}
+                    \caption{\tiny{Схематичное изображение полусумматора}}
+                \end{figure}
+            \end{column}
+        \end{columns}
+    \end{itemize}
+\end{frame}
+
+% Слайд сумматор
+\begin{frame}{Цифровой логический уровень}
+    \begin{itemize}
+        \item Сумматор~--- объединение двух полусумматоров.
+        \begin{spacing}{0.8}
+        \item Перенос разряда может возникнуть только в одном из полусумматоров.
+        В этой связи для сложения переносов достаточно объединить
+        соответствующие выходы <<П>> полусумматоров вентилем <<ИЛИ>>.
+        \item Многобитный сумматор~--- объединение однобитных сумматоров
+        \item На практике используют различные виды сумматоров с быстрым параллельным переносом
+        \end{spacing}
+        \begin{figure}[htp]
+            \centering
+            \includegraphics[height=2.1cm, keepaspectratio]{Adder1bitSchema.png}
+            \caption{\tiny{Схема сумматора}}
+        \end{figure}
+    \end{itemize}
+\end{frame}
+
+% Слайд вычитание
+\begin{frame}{Цифровой логический уровень}
+    \begin{itemize}
+        \item Вычитание
+        \begin{itemize}
+            \begin{footnotesize}
+            \item $a-b=r$; разрядность $а = n; a > b$
+            \item Для десятичных чисел: $a - b = a - b + 10^n - 10^n = a + (10^n - 1 - b) + 1 - 10^n$
+            \item Собственно вычитание заменяется двумя сложениями и двумя вычитаниями без заимствования разряда
+            \item $10^n - 1 - b$ называется дополнением до $9$, поскольку $10^n - 1$ состоит из девяток
+            \item В случае двоичных чисел осуществляется дополнение до 1,
+            что идентично инверсии числа (замены 0 на 1 и наоборот)
+            \end{footnotesize}
+        \end{itemize}
+        \item Шаги вычитания
+        \begin{itemize}
+            \begin{footnotesize}
+            \item Инверсия вычитаемого
+            \item Сложение уменьшаемого и инверсии вычитаемого
+            \item Добавление 1
+            \item В условиях ограниченной разрядности вычитание степени разряда не требуется
+            \end{footnotesize}
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+% Слайд отрицательные числа
+\begin{frame}{Цифровой логический уровень}
+    \begin{itemize}
+        \item Представление отрицательных чисел в двоичном виде
+        \begin{footnotesize}
+            \begin{itemize}
+                \item Для восьми бит: 0 = 0, 01 = 1, 10 = 2, \ldots, 01111111 = 127,
+                10000000 = -128, 10000001 = -127, \ldots, 11111111 = -1
+                \item Такой способ называется дополнением до 2 (дополнение до 1 и добавление 1)
+                \item Старший значащий бит называется знаковым разрядом, равен 1 для отрицательных
+                чисел и 0 для положительных
+                \item При выполнении операций необходимо следить за переполнением
+                или исчезновением разрядов
+                \item Результат сложения положительных и отрицательных чисел неверен,
+                если знаковые разряды операндов совпадают, а знаковый результат от них отличается
+            \end{itemize}
+        \end{footnotesize}
+\end{itemize}
+\end{frame}
+
+% Слайд комбинационные схемы
+\begin{frame}{Цифровой логический уровень}
+    \begin{itemize}
+        \item Комбинационные (комбинаторные) схемы
+        \begin{itemize}
+            \item При конструировании схем напрямую из вентилей будет возникать много вводов и выводов
+            \item Комбинационные схемы~--- схемы, в которых выходные сигналы
+            определяются текущими входными сигналами
+            \item Комбинационные схемы используются в вычислительных цепях для формирования входных
+            сигналов и для подготовки данных, которые подлежат сохранению
+            \item Комбинационные схемы~--- это устройства без <<памяти>>, выходные сигналы зависят
+            только от входных
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+% Слайд мультиплексор
+\begin{frame}{Цифровой логический уровень}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.6\textwidth}
+            \begin{itemize}
+            \item Мультиплексор
+                \begin{itemize}
+                    \item Схема с $2^n$ входами, одним выходом и \textbf{n} линиями управления
+                    \item Один из входов соединяется с выходом в зависимости от значения на линиях управления
+                    \item Возможна реализация различных табличных функций
+                    \item Преобразование параллельного кода в последовательный
+                \end{itemize}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{figure}[htp]
+                \centering
+                \includegraphics[height=2.8cm, keepaspectratio]{MultiplexorScheme.png}
+                \captionsetup{skip=-5pt}
+                \caption{\tiny{Mультиплексор}}
+            \end{figure}
+            \begin{figure}
+                \centering
+                \includegraphics[height=2cm]{MuxMajorityFunction.png}
+                \captionsetup{skip=-5pt}
+                \caption{\tiny{Функция большинства}}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд декодер
+\begin{frame}{Цифровой логический уровень}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.6\textwidth}
+            \begin{itemize}
+            \item Декодер
+                \begin{itemize}
+                    \item Схема с \textbf{n} входами, $2^n$ выходами
+                    \item Устанавливается в 1 выход, соответствующий числу (значению) на входе
+                    \item Использование: выбор схемы выполнения в зависимости от команды
+                \end{itemize}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{figure}[htp]
+                \centering
+                \includegraphics[height=3.6cm, keepaspectratio]{DecoderAction.png}
+                \caption{\tiny{Работа декодера}}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд компаратор
+\begin{frame}{Цифровой логический уровень}
+    \begin{itemize}
+        \item Компаратор
+        \begin{itemize}
+            \item Сравнивает два слова, поступившие на вход
+        \end{itemize}
+    \end{itemize}
+    \begin{figure}[htp]
+        \centering
+        \includegraphics[height=5cm, keepaspectratio]{Comparer.png}
+        \caption{\tiny{Компаратор}}
+    \end{figure}
+\end{frame}
+
+% Слайд Арифметико---логическое устройство
+\begin{frame}{Цифровой логический уровень}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.5\textwidth}
+            \begin{itemize}
+            \item Арифметико---логическое устройство
+                \begin{itemize}
+                    \item Выполнение операций <<НЕ>> над одним словом; <<И>>, <<ИЛИ>>, сложение над двумя входными словами
+                    \item INVA~--- инверсия А
+                    \item ENA~--- разрешение А
+                    \item ENB~--- разрешение B
+                \end{itemize}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{figure}[htp]
+                \centering
+                \includegraphics[height=5cm, keepaspectratio]{ALU.png}
+                \caption{\tiny{Арифметико---логическое устройство}}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд тактовый генератор
+\begin{frame}{Цифровой логический уровень}
+    \begin{itemize}
+        \item Тактовый генератор вызывает серию одинаковых по длительности и частоте импульсов
+            \begin{itemize}
+                \begin{footnotesize}
+                \item Используется для контроля времени выполнения операций
+                \item Временной интервал между началом одного и началом другого
+                импульса~--- такт (период)
+                \item Начала такта~--- фронт, окончание такта~--- спад
+                \item Синхронные и асинхронные (разное время высокого и низкого уровня сигнала) генераторы
+                \end{footnotesize}
+            \end{itemize}
+            \begin{columns}[T,onlytextwidth]
+                \begin{column}{0.66\textwidth}
+                    \begin{figure}[htp]
+                        \centering
+                        \includegraphics[height=1.8cm, keepaspectratio]{ClockGenerator.png}
+                        \caption{\tiny{Тактовый генератор и значение на выходе}}
+                    \end{figure}
+                \end{column}
+                \begin{column}{0.33\textwidth}
+                    \begin{figure}[htp]
+                        \centering
+                        \includegraphics[height=1.8cm, keepaspectratio]{ClockGeneratorAsync.png}
+                        \caption{\tiny{Формирование асинхронных импульсов}}
+                    \end{figure}
+                \end{column}
+            \end{columns}
+    \end{itemize}
+\end{frame}
+
+% Слайд SR-защелка
+\begin{frame}{Цифровой логический уровень}
+    Защелка
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.5\textwidth}
+            \begin{footnotesize}
+                \begin{itemize}
+                \item Необходима схема, которая запоминает <<предыдущее>> входное значение
+                \item Основана на двух вентилях <<НЕ-ИЛИ>>
+                \item SR~--- защелка: S~--- установка (setting), R~--- сброс (reset)
+            \end{itemize}
+            $S=0; R=0; Q=0 \Rightarrow \overline{Q} = 1 \Rightarrow Q=0$
+
+            $S=0; R=0; Q=1 \Rightarrow \overline{Q} = 0 \Rightarrow Q=1$
+
+            $S=1; R=0; Q=0 \Rightarrow \overline{Q} = 0 \Rightarrow Q=1$
+
+            $S=1; R=0; Q=1 \Rightarrow \overline{Q} = 0 \Rightarrow Q=1$
+
+            $S=0; R=1; Q=0 \Rightarrow \overline{Q} = 1 \Rightarrow Q=0$
+
+        \end{footnotesize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{figure}[htp]
+                \centering
+                \includegraphics[height=2.5cm, keepaspectratio]{SRLatch.png}
+                \caption{\tiny{SR~--- защелка}}
+            \end{figure}
+            \begin{table}
+                \centering
+                \begin{footnotesize}
+                \begin{tabular}{c|cc}
+                    \textbf{<<НЕ-ИЛИ>>} & 0 & 1 \\ \hline
+                    0 & 1 & 0 \\
+                    1 & 0 & 0
+                \end{tabular}
+                \end{footnotesize}
+            \end{table}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд синхронная SR-защелка
+\begin{frame}{Цифровой логический уровень}
+    \begin{itemize}
+        \item Синхронная $SR$~--- защелка
+        \begin{itemize}
+            \item Защелка, которая меняет состояние только в определенные моменты времени
+            \item Меняет состояние только когда значение синхровхода = 1 (включение, стробирование)
+        \end{itemize}
+        \begin{figure}[htp]
+            \centering
+            \includegraphics[height=3.6cm, keepaspectratio]{SRLatchSync.png}
+            \caption{\tiny{Синхронная $SR$~--- защелка}}
+        \end{figure}
+    \end{itemize}
+\end{frame}
+
+% Слайд проблема синхронной SR-защелки
+\begin{frame}{Цифровой логический уровень}
+    \begin{itemize}
+        \item Проблема синхронной $SR$~--- защелки
+        \begin{itemize}
+            \item $S=1; R=1 \Rightarrow$ схема становится недетерминированной,
+            когда $S$ и $R$ вернуться к 0
+            \item Состояние выхода зависит от того, на каком из входов $S$ или $R$
+            раньше появится 0
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+% Слайд проблема D-защелка
+\begin{frame}{Цифровой логический уровень}
+    \begin{itemize}
+        \item Синхронная $D$-защелка
+        \begin{itemize}
+            \item Единственный вход $D$
+            \item Запоминает значение, когда есть сигнал на синхровходе
+            \item Память объемом 1 бит
+            \item Реализуется 11 транзисторами, возможны более сложные
+            схемы с меньшим числом транзисторов
+        \end{itemize}
+        \begin{figure}[htp]
+            \centering
+            \includegraphics[height=3.4cm, keepaspectratio]{DSyncLatch.png}
+            \caption{\tiny{Синхронная $D$~--- защелка}}
+        \end{figure}
+    \end{itemize}
+\end{frame}
+
+% Слайд проблема триггер
+\begin{frame}{Цифровой логический уровень}
+    \begin{itemize}
+        \item Триггер (flip-flop)
+        \begin{itemize}
+            \item Для сохранения сигнала на входе в заданный момент времени
+            \item Срабатывает, когда происходит переход сигнала с 0 на 1 (фронт)
+            и наоборот (спад)
+            \item Защелка запускается уровнем сигнала, триггер запускается
+            перепадом сигнала
+        \end{itemize}
+        \begin{columns}[T,onlytextwidth]
+            \begin{column}{0.4\textwidth}
+                \begin{figure}[htp]
+                    \centering
+                    \includegraphics[height=2cm, keepaspectratio]{Trigger.png}
+                    \caption{\tiny{Триггер}}
+                \end{figure}
+            \end{column}
+            \begin{column}{0.6\textwidth}
+                \begin{figure}[htp]
+                    \centering
+                    \includegraphics[width=3.4cm, keepaspectratio]{TriggerTiming.png}
+                    \caption{\tiny{Срабатывание триггера}}
+                \end{figure}
+            \end{column}
+        \end{columns}
+    \end{itemize}
+\end{frame}
+\end{document}
