@@ -1,0 +1,819 @@
+\documentclass[aspectratio=169,14pt]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[main=russian,english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[labelformat=empty]{caption}
+\usepackage{multimedia}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{verbatim}
+\usepackage{multirow}
+
+\usetheme{Singapore}
+
+\definecolor{urlcolor}{HTML}{799B03} % цвет гиперссылок
+\hypersetup{urlcolor=urlcolor, colorlinks=true}
+
+\graphicspath{{../Images/}}
+
+\title{Центральные процессоры}
+
+\begin{document}
+
+% Слайд центральные процессоры
+\begin{frame}{Центральные процессоры}
+    \begin{itemize}
+        \item Из простейших электронных элементов можно сконструировать АЛУ и
+        память для хранения промежуточных результатов выполнения арифметических
+        и логических операций
+        \pause
+        \item Микропроцессор~--- устройство, отвечающее за выполнение арифметических,
+        логических операций и операций управления, записанных в машинном коде
+        \pause
+        \item Реализуется в виде одной или нескольких микросхем
+    \end{itemize}
+\end{frame}
+
+% Слайд коды операций, регистры
+\begin{frame}{Коды операций (инструкций). Регистры}
+    \begin{itemize}
+        \begin{spacing}{0.8}
+        \item Простейшее АЛУ: операция для выполнения задается набором
+        входных сигналов F0 и F1
+        \pause
+        \item Каждой операции можно поставить в соответствие некоторое число: получаем
+        набор операций (команд или инструкций) для данного АЛУ (процессора)
+        \pause
+        \item Для выполнения операций АЛУ должно получить доступ к операндам
+        (иметь электрические контакты с устройством хранения). Такие устройства
+        называются регистрами. Набор регистров называется файлом регистров.
+        \pause
+        \item Для удобства написания программы регистры часто
+        именуются (0,1,2\ldots; R1-R31; AX, BX\ldots)
+        \pause
+        \item Названия регистров можно использовать в качестве
+        операндов в операциях.
+        \end{spacing}
+    \end{itemize}
+\end{frame}
+
+% Слайд машинный код, ассемблер
+\begin{frame}[containsverbatim]{Машинный код, ассемблер}
+    \begin{itemize}
+        \item \footnotesize{Машинный код~--- последовательность команд в виде, готовом для исполнения на процессоре}
+        \begin{table}
+            \centering
+            \begin{tiny}
+            \begin{tabular}{ccc}
+                \textbf{Адрес в памяти} & \textbf{Содержимое памяти} & \textbf{Комментарий} \\ \hline
+                00000 & 11100101 & cчитываем слово в регистр AX\ldots \\
+                00001 & 00000101 & \ldotsиз порта номер 5 \\
+                00002 & 01000000 & увеличиваем на 1 регистр AX \\
+                00003 & 11100111 & записываем слово из регистра AX\ldots \\
+                00004 & 00000010 & \ldotsв порт номер 2 \\
+                00005 & 11101011 & повторяем действия с помощью перехода\ldots \\
+                00006 & 11111001 & \ldotsназад на 7 байт \\
+            \end{tabular}
+            \end{tiny}
+        \end{table}
+        \item \footnotesize{Ассемблер~-- язык, в котором машинные инструкции представляются символами (символическими именами)}
+        \begin{columns}[T,onlytextwidth]
+            \begin{column}{0.7\textwidth}
+                \begin{tiny}
+                \begin{verbatim}
+CYCLE:
+IN      AX, 5   ;считываем слова из порта номер 5 в регистр AX
+INC     AX      ;увеличиваем на 1 регистр AX
+OUT     2, AX   ;записываем слово из регистра AX в порт номер 2
+JMP     CYCLE   ;повторяем действия
+                \end{verbatim}
+                \end{tiny}
+            \end{column}
+            \begin{column}{0.3\textwidth}
+                \begin{tabular}{|c|c|}
+                    \hline
+                    \textbf{Инструкция} & \textbf{OpCode} \\ \hline
+                    IN & \verb 1110010- \\ \hline
+                    INC & \verb 01000--- \\ \hline
+                    OUT & \verb 1110011- \\ \hline
+                    JMP & \verb 11101011 \\ \hline
+                \end{tabular}
+            \end{column}
+        \end{columns}
+    \end{itemize}
+\end{frame}
+
+% Слайд архитектура и микроархитектура
+\begin{frame}{Архитектура (Instruction Set Architecture) и Микроархитектура}
+    \begin{itemize}
+        \item ISA
+        \begin{itemize}
+            \item Состояние, видимое программисту (память, регистры, \ldots)
+            \item Набор инструкций (синтаксис) и семантика их выполнения
+            \item Прерывания
+            \item Ввод/вывод
+        \end{itemize}
+        \pause
+        \item Микроархитектура (реализация ISA в <<железе>>)
+        \begin{itemize}
+            \item Количество и глубина конвейера
+            \item Микрокод
+            \item Кeш
+            \item \ldots
+        \end{itemize}
+        \pause
+        \item Без абстракций сложно перейти от физических устройств к приложениям
+    \end{itemize}
+\end{frame}
+
+% Слайд архитектура и микроархитектура
+\begin{frame}{Характеристики ISA}
+    \begin{itemize}
+        \begin{spacing}{0.8}
+        \item Классы инструкций
+        \begin{itemize}
+            \begin{footnotesize}
+            \item Арифметико-логические
+            \item Контроль управления
+            \item Передача данных
+            \item Плавающая точка, мультимедиа, строки, \ldots
+            \end{footnotesize}
+        \end{itemize}
+        \pause
+        \item Адресация памяти (регистры, смещения, индексы, абсолютная, \ldots)
+        \pause
+        \item Кодирование инструкций
+        \begin{itemize}
+            \begin{footnotesize}
+            \item Фиксированный размер (RISC: MIPS, PowerPC, SPARC, \ldots)
+            \item Переменный размер (CISC: IBM360, x86, VAX, \ldots)
+            \item Mostly Fixed or Compressed
+            \item Very Long Instruction Word
+            \end{footnotesize}
+        \end{itemize}
+        \pause
+        \item Почему отличаются ISA?
+        \begin{itemize}
+            \begin{footnotesize}
+            \item Влияние технологий (дорогие устройства хранения -> сжатие; Multicore/Manycore, \ldots)
+            \item Влияние приложений (инструкции для приложений: DSP; новые улучшенные компиляторы, \ldots)
+            \end{footnotesize}
+        \end{itemize}
+        \end{spacing}
+    \end{itemize}
+\end{frame}
+
+% Слайд пример единая ISA - разная микроархитектура
+\begin{frame}{Пример: единая ISA~--- различная микроархитектура}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.5\textwidth}
+            \begin{itemize}
+                \begin{footnotesize}
+                \begin{spacing}{0.8}
+                \item X86 Instruction Set
+                \item Quad Core
+                \item 125W
+                \item Decode 3 Instructions/Cycle/Core
+                \item 64KB L1 I Cache, 64KB L1 D Cache
+                \item 512KB L2 Cache
+                \item Out-of-order
+                \item 2.6GHz
+                \end{spacing}
+                \end{footnotesize}
+                \begin{figure}[htp]
+                    \centering
+                    \includegraphics[height=2cm, keepaspectratio]{AMDPhenomX4.jpg}
+                \end{figure}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{itemize}
+                \begin{footnotesize}
+                \begin{spacing}{0.8}
+                \item X86 Instruction Set
+                \item Single Core
+                \item 2W
+                \item Decode 2 Instructions/Cycle/Core
+                \item 32KB L1 I Cache, 24KB L1 D Cache
+                \item 512KB L2 Cache
+                \item In-order
+                \item 1.6GHz
+                \end{spacing}
+                \end{footnotesize}
+                \begin{figure}[htp]
+                    \centering
+                    \includegraphics[height=2cm, keepaspectratio]{IntelAtom.jpg}
+                \end{figure}
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд пример различная ISA - разная микроархитектура
+\begin{frame}{Пример: различная ISA~--- различная микроархитектура}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.5\textwidth}
+            AMD Phenom X4
+            \begin{itemize}
+                \begin{footnotesize}
+                \begin{spacing}{0.8}
+                \item X86 Instruction Set
+                \item Quad Core
+                \item 125W
+                \item Decode 3 Instructions/Cycle/Core
+                \item 64KB L1 I Cache, 64KB L1 D Cache
+                \item 512KB L2 Cache
+                \item Out-of-order
+                \item 2.6GHz
+                \end{spacing}
+                \end{footnotesize}
+                \begin{figure}[htp]
+                    \centering
+                    \includegraphics[height=2cm, keepaspectratio]{AMDPhenomX4.jpg}
+                \end{figure}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            IBM POWER7
+            \begin{itemize}
+                \begin{footnotesize}
+                \begin{spacing}{0.8}
+                \item Power Instruction Set
+                \item Eight Core
+                \item 200W
+                \item Decode 6 Instructions/Cycle/Core
+                \item 32KB L1 I Cache, 32KB L1 D Cache
+                \item 256KB L2 Cache
+                \item Out-of-order
+                \item 4.25GHz
+                \end{spacing}
+                \end{footnotesize}
+                \begin{figure}[htp]
+                    \centering
+                    \includegraphics[height=2cm, keepaspectratio]{IBMPower7.jpg}
+                \end{figure}
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд Intel 8086/8088
+\begin{frame}{Процессор Intel 8086/8088}
+    \begin{spacing}{0.8}
+    \begin{itemize}
+        \item 1978 г. Intel 8086 (первое поколение 16 разрядных процессоров Intel)
+        \item 1979 г. Intel 8088 (восьмиразрядная шина данных для того, чтобы
+        использовать уже существующие микросхемы <<поддержки>>: доступ к памяти,
+        контроллер прерываний, I/O, \ldots)
+        \item Двадцатиразрядная шина адреса
+        \item Мультиплексированная шина адреса/данных
+        \item Частота 4-10 МГц, технология 3 мкм
+        \item 29 000 транзисторов
+    \end{itemize}
+    \begin{figure}[htp]
+        \centering
+        \includegraphics[height=1.8cm, keepaspectratio]{8088Foto.jpg}
+    \end{figure}
+    \end{spacing}
+\end{frame}
+
+
+% 8088PinsMinMode
+
+% Слайд Intel 8086/8088 - описание контактов
+\begin{frame}{Intel 8088 - описание контактов}
+    \begin{figure}[htp]
+        \centering
+        \includegraphics[height=6cm, keepaspectratio]{8088PinsMinMode.png}
+        \captionsetup{skip=-5pt}
+        \caption{\tiny{Контакты процессора Intel 8088}}
+    \end{figure}
+\end{frame}
+
+% Слайд Intel 8086/8088 - архитектура
+\begin{frame}{Intel 8086/8088: архитектура}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.5\textwidth}
+            \begin{itemize}
+                \begin{spacing}{0.8}
+                \item BIU (Bus Interface Unit)~--- \textbf{Блок интерфейса шины}: извлекает
+                инструкции, считывает операнды и записывает результат
+                \item EU (Execution Unit)~--- \textbf{Блок исполнения}: выполняет
+                инструкции
+                \item Организована очередь инструкций для ускорения доступа
+                \end{spacing}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{figure}[htp]
+                \centering
+                \includegraphics[height=6cm, keepaspectratio]{8086InternalStructureEng.png}
+                \captionsetup{skip=-5pt}
+                \caption{\tiny{Общая архитектура Intel 8088}}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд Intel 8086/8088 - архитектура, детали
+\begin{frame}{Intel 8086/8088: детали архитектуры}
+    \begin{figure}[htp]
+        \centering
+        \includegraphics[height=6.6cm, keepaspectratio]{8086InternalStructureDetail.png}
+        \captionsetup{skip=-5pt}
+        \caption{\tiny{Детали архитектуры Intel 8088}}
+    \end{figure}
+\end{frame}
+
+% Слайд Intel 8086/8088 - конвейер
+\begin{frame}{Intel 8086/8088: конвейер}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.5\textwidth}
+            \begin{itemize}
+                \begin{spacing}{0.8}
+                \item Для ускорения выполнения последовательности инструкций
+                \item Блоки EU и BIU работают параллельно (одновременно)
+                \end{spacing}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{figure}[htp]
+                \centering
+                \includegraphics[height=2.8cm, keepaspectratio]{8088InternalPipeline.png}
+                \captionsetup{skip=-8pt}
+                \caption{\tiny{Конвейер Intel 8088}}
+            \end{figure}
+        \end{column}
+    \end{columns}
+    \begin{figure}[htp]
+        \centering
+        \includegraphics[height=1.2cm, keepaspectratio]{StandartSerialExecution.png}
+        \captionsetup{skip=-5pt}
+    \end{figure}
+    \begin{figure}[htp]
+        \centering
+        \includegraphics[height=1.6cm, keepaspectratio]{8088ParallelExecution.png}
+        \captionsetup{skip=-5pt}
+    \end{figure}
+\end{frame}
+
+% Слайд Intel 8086/8088 - регистры
+\begin{frame}{Intel 8086/8088: регистры}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.6\textwidth}
+            \begin{itemize}
+                \begin{spacing}{0.8}
+                \item DATA~--- AX, BX, CX, DX регистры общего назначения, для
+                арифметических и логических операций; некоторые специальные
+                \item POINTER и INDEX~--- BP, SP указывают на стек,  SI (Source),
+                DI (Destination)~--- для работ со строками, имеют автоувеличение
+                и автоуменьшение
+                \item CONTROL~--- IP (указатель инструкций), flags
+                (флаги)~--- результат операции
+                \end{spacing}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{figure}[htp]
+                \centering
+                \includegraphics[height=3.4cm, keepaspectratio]{8088Registers.png}
+                \captionsetup{skip=-8pt}
+                \caption{\tiny{Регистры Intel 8088}}
+                \includegraphics[height=2cm, keepaspectratio]{8088FlagRegister.png}
+                \captionsetup{skip=-8pt}
+                \caption{\tiny{Регистр флагов Intel 8088}}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд Intel 8086/8088 - организация памяти
+\begin{frame}{Intel 8086/8088: организация памяти}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.5\textwidth}
+            \begin{footnotesize}
+            \begin{itemize}
+                \begin{spacing}{0.8}
+                \item 20-разрядная шина адреса, до 1Мб памяти
+                \item С точки зрения хранения: память~--- линейная
+                последовательность байт
+                \item С точки зрения программы: память разбивается на
+                сегменты по 64Кб (логическое деление)
+                \end{spacing}
+                \begin{itemize}
+                    \begin{footnotesize}
+                    \begin{spacing}{0.8}
+                    \item Каждый сегмент имеет начальный (базовый) адрес,
+                    выровненный по границе 16 байт (4 младших бита == 0)
+                    \item Сегменты могут пересекаться
+                    \item Каждое приложение определяет и использует
+                    сегменты самостоятельно
+                    \item Возможно динамическое перераспределение программы в памяти
+                    \end{spacing}
+                    \end{footnotesize}
+                \end{itemize}
+            \end{itemize}
+            \end{footnotesize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{figure}[h]
+                \centering
+                \includegraphics[height=2.6cm, keepaspectratio]{8086MemorySegments.png}
+                \captionsetup{skip=-8pt}
+                \caption{\tiny{Cегменты Intel 8088}}
+                \includegraphics[height=3.2cm, keepaspectratio]{8086RegisterSegment.png}
+                \captionsetup{skip=-8pt}
+                \caption{\tiny{Регистры сегментов Intel 8088}}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд Intel 8086/8088 - формирование физического адреса
+\begin{frame}{Intel 8086/8088: формирование физического адреса}
+    \begin{columns}[t,onlytextwidth]
+        \begin{column}{0.7\textwidth}
+            \begin{itemize}
+                \begin{footnotesize}
+                \begin{spacing}{0.8}
+                \item Физический адрес = Сегмент * 16 + Смещение
+                \item Осуществляется блоком BIU
+                \item Смещение (в случае эффективного адреса) вычисляется блоком EU
+                \end{spacing}
+                \end{footnotesize}
+                \begin{figure}[h]
+                    \centering
+                    \includegraphics[height=2cm, keepaspectratio]{8086PhysicalAdressCalculation.png}
+                    \begin{tiny}
+                    \begin{tabular}{|p{2.2cm}|p{1.8cm}|p{1.8cm}|p{1.2cm}|}
+                        \hline
+                        \textbf{Тип ссылки} & \textbf{Базовый регистр по умолчанию} & \textbf{Альтернативный базовый регистр} & \textbf{Смещение} \\ \hline
+                        Извлечение инструкции & CS & None & IP \\ \hline
+                        Операции со стеком & SS & None & SP \\ \hline
+                        Данные (переменные) & DS & CS, ES, SS & Эфф. адрес \\ \hline
+                        Источник строки & DS & CS, ES, SS & SI \\ \hline
+                        Приемник строки & ES & None & DI \\ \hline
+                        BP как базовый регистр & SS & CS, DS, ES & Эфф. адрес \\ \hline
+                    \end{tabular}
+                    \end{tiny}
+                \end{figure}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.3\textwidth}
+            \begin{figure}[h]
+                \centering
+                \includegraphics[height=4.8cm, keepaspectratio]{8086LogicalPhysicalAdress.png}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд Intel 8086/8088 - зарезервированная память
+\begin{frame}{Intel 8086/8088: зарезервированная память}
+    \begin{columns}[t,onlytextwidth]
+        \begin{column}{0.6\textwidth}
+            \begin{itemize}
+                \item Intel зарезервировала часть оперативной памяти для
+                специальных функций процессора
+                \item Используется для прерываний и обработки системного
+                сброса (system reset)
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{figure}[t]
+                \centering
+                \includegraphics[height=5.4cm, keepaspectratio]{IntelReservedMemory.png}
+                \captionsetup{skip=-5pt}
+                \caption{\tiny{зарезервированная память}}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд Intel 8086/8088 - ввод/вывод
+\begin{frame}{Intel 8086/8088: ввод/вывод}
+    \begin{itemize}
+        \item Ввод/вывод осуществляется через нумерованные ячейки~---
+        так называемые порты ввода/вывода
+        \item Пространство портов ввода/вывода, отдельное от памяти
+        \begin{itemize}
+            \item ~<<+>>: быстрая работа, не расходуется память
+            \item ~<<->>: отдельные инструкции, сложнее программировать
+        \end{itemize}
+        \item Также может использоваться память для реализации
+         портов ввода/вывода
+        \item Пространство портов не сегментируется
+    \end{itemize}
+\end{frame}
+
+% Слайд Intel 8086/8088 - прерывания
+\begin{frame}{Intel 8086/8088: прерывания}
+    \begin{spacing}{0.8}
+    \begin{footnotesize}
+    \begin{itemize}
+        \begin{footnotesize}
+            \item Прерывание~--- изменение последовательности выполнения команд
+            \begin{itemize}
+                \begin{footnotesize}
+                \item внешние, аппаратные (при возникновении сигнала на специально выделенных для этих целей входных контактах процессора)
+                \item внутренние процессора (деление на ноль, трассировка программы)
+                \item программные (специальная инструкция, чаще всего для операций ввода/вывода или вызова функций BIOS)
+                \end{footnotesize}
+            \end{itemize}
+        \item У каждого прерывания есть номер, по которому процессор определяет подпрограмму для обработки этого прерывания (обработчик прерывания)
+        \begin{itemize}
+            \begin{footnotesize}
+            \item Поддерживается 256 прерываний
+            \item Существует таблица прерываний, содержащая адреса обработчиков.  Порядковый  номер элемента в этой таблице соответствует номеру прерывания. Эта таблица хранится в памяти
+            \item Содержимое элемента таблицы прерываний (вектор прерывания) – двойное слово – адрес вызываемой процедуры (обработчика)
+            \end{footnotesize}
+        \end{itemize}
+        \item Маскируемые и немаскируемые прерывания: можно наложить маску (фильтр), которая запретит поступление определенных прерываний в процессор
+        \end{footnotesize}
+    \end{itemize}
+    \end{footnotesize}
+    \end{spacing}
+\end{frame}
+
+% Слайд Intel 8086/8088 - таблица прерываний
+\begin{frame}{Intel 8086/8088: таблица прерываний, обработка аппаратных прерываний}
+    \begin{columns}[t,onlytextwidth]
+        \begin{column}{0.5\textwidth}
+            \begin{figure}[t]
+                \centering
+                \includegraphics[height=5.4cm, keepaspectratio]{8086InterruptTable.png}
+                \captionsetup{skip=-5pt}
+                \caption{\tiny{Таблица прерываний}}
+            \end{figure}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{itemize}
+                \begin{spacing}{0.8}
+                \begin{footnotesize}
+                    \item Маскируемые прерывания поступают через контроллер прерываний
+                    \item Немаскируемые~-- через специальный контакт процессора
+                \end{footnotesize}
+                \end{spacing}
+                \begin{figure}[t]
+                    \centering
+                    \includegraphics[height=3cm, keepaspectratio]{Intel8088MaskableNonMaskableInterrupt.png}
+                    \captionsetup{skip=-5pt}
+                    \caption{\tiny{Поступление аппаратных прерываний}}
+                \end{figure}
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд Intel 8086/8088 - обработка прерываний
+\begin{frame}{Intel 8086/8088: обработка прерываний}
+    \begin{columns}[t,onlytextwidth]
+        \begin{column}{0.6\textwidth}
+            \begin{itemize}
+                \begin{footnotesize}
+                \begin{spacing}{0.8}
+                    \item Содержимое регистра флагов помещается на стек
+                    \item Флаги IF и TF очищаются для запрещения прерываний (очищается сигнал INTR) и возможной передачи управления отладчику
+                    \item Содержимое регистра CS помещается на стек
+                    \item Содержимое регистра IP помещается на стек
+                    \item Извлекается вектор прерывания и его содержимое помещается в регистры IP и CS соответственно. Следующей командой будет выполняться первая команда обработчика прерывания
+                    \item Возврат из обработчика прерывания должен быть осуществлен специальной инструкцией IRET, которая восстанавливает флаги и возобновляет работу с инструкции, на которую до появления прерывания указывал IP
+                \end{spacing}
+                \end{footnotesize}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{figure}[t]
+                \centering
+                \includegraphics[height=6cm, keepaspectratio]{8086InterruptProcessing.png}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд Intel 8086/8088 - аппаратные прерывания
+\begin{frame}{Intel 8086/8088: аппаратные прерывания}
+    \begin{footnotesize}
+    \begin{table}
+        \centering
+        \begin{tabular}{|p{4.4cm}|p{5cm}|}
+            \hline
+            \textbf{Линия прерывания} & \textbf{Типичное использование} \\ \hline
+            IRQ3 & Последовательный порт 2 \\ \hline
+            IRQ4 & Последовательный порт 1 \\ \hline
+            IRQ5 & Параллельный порт 2 \\ \hline
+            IRQ6 & Драйвер НГМД \\ \hline
+            IRQ7 & Параллельный порт 1 \\ \hline
+            IRQ9, IRQ10, IRQ11, IRQ15 & None \\ \hline
+            IRQ12 & Интерфейс мыши \\ \hline
+            IRQ14 & Драйвер НЖМД \\ \hline
+        \end{tabular}
+        \captionsetup{skip=-5pt}
+        \caption{\tiny{Линии прерываний на шине ISA}}
+    % \end{table}
+    % \begin{table}
+    %     \centering
+        \begin{tabular}{|p{3.4cm}|p{7.8cm}|}
+            \hline
+            \textbf{Линия прерывания} & \textbf{Типичное использование} \\ \hline
+            IRQ0 & Системный таймер \\ \hline
+            IRQ1 & Интерфейс клавиатуры \\ \hline
+            IRQ2 & Прерывание от дополнительного контроллера PIC \\ \hline
+            IRQ8 & Часы реального времени \\ \hline
+            IRQ13 & Сопроцессор \\ \hline
+        \end{tabular}
+        \captionsetup{skip=-5pt}
+        \caption{\tiny{Линии прерываний, подключенные к контроллерам прерываний}}
+    \end{table}
+    \end{footnotesize}
+\end{frame}
+
+% Слайд Intel 8086/8088 - команды
+\begin{frame}{Intel 8086/8088: команды}
+    \begin{itemize}
+        \item Арифметические и логические инструкции
+        \item Инструкции пересылки данных
+        \item Инструкции работы со строками (до 64К)
+        \item Инструкции передачи управления
+        \item Инструкции управления процессором
+    \end{itemize}
+\end{frame}
+
+% Слайд Intel 8086/8088 - арифметические и логические инструкции
+\begin{frame}{Intel 8086/8088: команды}
+    \begin{columns}[t,onlytextwidth]
+        \begin{column}{0.5\textwidth}
+            Арифметические и логические инструкции
+            \begin{tiny}
+            \begin{tabular}{|p{0.9cm}|p{5cm}|}
+                \hline
+                \multicolumn{2}{|c|}{\textbf{Логические}} \\ \hline
+                NOT & \glqq NOT\grqq байта или слова\\ \hline
+                AND & \glqq AND\grqq байт или слов\\ \hline
+                OR & \glqq OR\grqq байт или слов\\ \hline
+                XOR & \glqq Исключающее OR\grqq байт или слов\\ \hline
+                TEST & \glqq AND\grqq байт или слов без записи результата\\ \hline
+                \multicolumn{2}{|c|}{\textbf{Сдвиг}} \\ \hline
+                SHL/SAL & Логический и арифметический сдвиг влево \\ \hline
+                SHR & Логический сдвиг вправо \\ \hline
+                SAR & Арифметический сдвиг вправо \\ \hline
+                \multicolumn{2}{|c|}{\textbf{Циклический сдвиг}} \\ \hline
+                ROL & Циклический сдвиг влево \\ \hline
+                ROR & Циклический сдвиг вправо \\ \hline
+                RCL & Циклический сдвиг влево c использованием CF \\ \hline
+                RСR & Циклический сдвиг вправо c использованием CF \\ \hline
+            \end{tabular}
+            \end{tiny}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{tiny}
+            \begin{tabular}{|p{0.9cm}|p{5.4cm}|}
+                \hline
+                \multicolumn{2}{|c|}{\textbf{Сложение}} \\ \hline
+                ADD & Сложение байта или слова\\ \hline
+                ADС & Сложение с переносом (+ СF)\\ \hline
+                INC & Увеличение на 1\\ \hline
+                AAA & ACSII корректировка после сложения BCD\\ \hline
+                DAA & Десятичная корректировка после сложения BCD\\ \hline
+                \multicolumn{2}{|c|}{\textbf{Вычитание}} \\ \hline
+                SUB & Вычитание \\ \hline
+                SBB & Вычитание с заёмом (- CF) \\ \hline
+                DEC & Уменьшение на 1 \\ \hline
+                NEG & Изменение знака на противоположный \\ \hline
+                CMP & Сравнение \\ \hline
+                AAS & ACSII корректировка после вычитания BCD \\ \hline
+                DAS & Десятичная корректировка после вычитания BCD \\ \hline
+                \multicolumn{2}{|c|}{\textbf{Умножение}} \\ \hline
+                MUL & Беззнаковое умножение \\ \hline
+                IMUL & Целочисленное умножение \\ \hline
+                AAM & ACSII корректировка после умножения BCD \\ \hline
+                \multicolumn{2}{|c|}{\textbf{Деление}} \\ \hline
+                DIV & Беззнаковое деление \\ \hline
+                IDIV & Целочисленное деление \\ \hline
+                AAВ & ACSII корректировка после деления BCD \\ \hline
+                CBW & Преобразование байта в слово \\ \hline
+                CWD & Преобразование слова в двойное слово \\ \hline
+            \end{tabular}
+            \end{tiny}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд Intel 8086/8088 - инструкции передачи управления
+\begin{frame}{Intel 8086/8088: команды}
+    \begin{columns}[t,onlytextwidth]
+        \begin{column}{0.5\textwidth}
+            Инструкции передачи управления
+            \begin{tiny}
+            \begin{tabular}{|p{1.8cm}|p{4.2cm}|}
+                \hline
+                \multicolumn{2}{|c|}{\textbf{Безусловный переход}} \\ \hline
+                CALL & Вызов процедуры \\ \hline
+                RET & Возврат из процедуры \\ \hline
+                JMP & Переход по адресу \\ \hline
+                \multicolumn{2}{|c|}{\textbf{Управление циклами}} \\ \hline
+                LOOP & Переход по метке \\ \hline
+                LOOPE/LOOPZ & Переход по метке, если равно/ноль \\ \hline
+                LOOPE/LOOPZ & Переход по метке, если не равно/не ноль \\ \hline
+                JCXZ & Переход, если регистр CX=0 \\ \hline
+                \multicolumn{2}{|c|}{\textbf{Прерывания}} \\ \hline
+                INT & Вызов прерывания \\ \hline
+                INTO & Вызов прерывания, если переполнение \\ \hline
+                IRET & Возврат из прерывания \\ \hline
+            \end{tabular}
+        \end{tiny}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{tiny}
+            \begin{tabular}{|p{0.9cm}|p{5.4cm}|}
+                \hline
+                \multicolumn{2}{|c|}{\textbf{Условный переход}} \\ \hline
+                JA/JNBE & Переход, если выше/не ниже не равно (беззнаковый)\\ \hline
+                JAE/JNB & Переход, если не ниже/выше или равно (беззнаковый)\\ \hline
+                JB/JNAE & Переход, если ниже/не выше или не равно (беззнаковый)\\ \hline
+                JBE/JNA & Переход, если ниже или равно/не выше (беззнаковый)\\ \hline
+                JBС & Переход, если возник перенос\\ \hline
+                JE/JZ & Переход, если равно/ноль\\ \hline
+                JG/JNLE & Переход, если больше/не меньше и не равно\\ \hline
+                JGE/JNL & Переход, если больше или равно/не меньше\\ \hline
+                JL/JNGE & Переход, если меньше/не больше и не равно\\ \hline
+                JLE/JNG & Переход, если меньше или равно/не больше\\ \hline
+                JNC & Переход, если нет переноса\\ \hline
+                JNE/JNZ & Переход, если не равно/не ноль\\ \hline
+                JNO & Переход, если нет переполнения\\ \hline
+                JNP/JPO & Переход, если нет четности/нечетная четность\\ \hline
+                JNS & Переход, если нет знака\\ \hline
+                JO & Переход, если есть переполнение\\ \hline
+                JP/JPE & Переход, если есть четность/четность четная\\ \hline
+                JS & Переход, если есть знак\\ \hline
+            \end{tabular}
+            \end{tiny}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд Intel 8086/8088 - инструкции пересылки данных
+\begin{frame}{Intel 8086/8088: команды}
+    \begin{columns}[t,onlytextwidth]
+        \begin{column}{0.5\textwidth}
+            Инструкции пересылки данных
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{figure}[р]
+                \centering
+                \includegraphics[height=6.4cm, keepaspectratio]{8086TransferInstruction.png}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд Intel 8086/8088 - инструкции работы со строками
+\begin{frame}{Intel 8086/8088: команды}
+    \begin{columns}[t,onlytextwidth]
+        \begin{column}{0.5\textwidth}
+            Инструкции работы со строками
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{figure}[р]
+                \centering
+                \includegraphics[height=6.4cm, keepaspectratio]{8086StringInstruction.png}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд Intel 8086/8088 - инструкции управления процессором
+\begin{frame}{Intel 8086/8088: команды}
+    \begin{columns}[t,onlytextwidth]
+        \begin{column}{0.5\textwidth}
+            Инструкции управления процессором
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{figure}[р]
+                \centering
+                \includegraphics[height=6.4cm, keepaspectratio]{8086CPUInstruction.png}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд Intel 8087 - сопроцессор 8087
+\begin{frame}{Сопроцессор Intel 8087}
+    \begin{itemize}
+        \begin{footnotesize}
+        \item Для увеличения быстродействия при выполнении вычислений с плавающей точкой
+        \item Собственный набор инструкций
+        \item Вычисление экспоненты, логарифмов, тригонометрических функций
+        \item Расширенный 80-битный формат чисел
+        \item CPU~--- общее управление процессом вычислений, NPX (Numeric Processor Extension)~--- только свои команды
+        \end{footnotesize}
+        \begin{figure}[р]
+            \centering
+            \includegraphics[height=2.6cm, keepaspectratio]{8087DataTypes.png}
+        \end{figure}
+\end{itemize}
+\end{frame}
+
+\end{document}
