@@ -1,0 +1,615 @@
+\documentclass[aspectratio=169,14pt]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[main=russian,english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[labelformat=empty]{caption}
+\usepackage{multimedia}
+\usepackage{xcolor}
+% \usepackage{hyperref}
+\usepackage{setspace}
+% \usepackage{verbatim}
+% \usepackage{multirow}
+
+\usetheme{Singapore}
+
+\definecolor{urlcolor}{HTML}{799B03} % цвет гиперссылок
+\hypersetup{urlcolor=urlcolor, colorlinks=true}
+
+\graphicspath{{../Images/}}
+
+\title{Центральные процессоры - 80168 - Pentium III}
+
+\begin{document}
+
+% Слайд Intel 80186
+\begin{frame}{Intel 80186}
+    \begin{itemize}
+        \item 1982 год~--- процессор 80186
+        \pause
+        \item 6-25 МГц, 3мкм, 55000 транзисторов
+        \pause
+    \end{itemize}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.5\textwidth}
+            \begin{figure}[htp]
+                \centering
+                \includegraphics[height=5cm, keepaspectratio]{8086ComponentFamily.png}
+                \captionsetup{skip=-5pt}
+                \caption{\tiny{Микросхемы поддержки Intel 8088}}
+            \end{figure}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{figure}[htp]
+                \centering
+                \includegraphics[width=4.9cm, keepaspectratio]{80188BlockArchitecture.png}
+                \includegraphics[height=2cm, keepaspectratio]{80188Foto.jpg}
+                % \captionsetup{skip=-5pt}
+                % \caption{\tiny{Микросхемы поддержки Intel 8088}}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд Intel 80286
+\begin{frame}{Intel 80286}
+    \begin{itemize}
+        \begin{spacing}{0.8}
+            \item 1982 год~--- второе поколение 16-разрядных процессоров
+            \item 16-разрядная шина данных, 24-разрядная шина адреса, демультиплексированы
+            \item Частота 6-20 МГц, технология 1.5 мкм
+            \item Увеличено количество регистров (+11)
+            \item 16 новых команд
+        \end{spacing}
+        \pause
+    \end{itemize}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}[c]{0.5\textwidth}
+        %     \begin{figure}[htp]
+        %         \centering
+                \includegraphics[height=3cm, keepaspectratio]{80286Face.jpg}
+            % \end{figure}
+        \end{column}
+        \begin{column}[c]{0.5\textwidth}
+            % \begin{figure}[htp]
+            %     \centering
+                \includegraphics[width=3cm, keepaspectratio]{80286UnFace.jpg}
+            % \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд Intel 80286 - внутренняя архитектура
+\begin{frame}{Intel 80286~--- внутренняя архитектура}
+    \begin{itemize}
+        \begin{footnotesize}
+        \begin{spacing}{0.8}
+            \item \textbf{Блок шины}, BU (Bus Unit)~--- операции с шиной, генерация адресов
+            и данных на выводах, а также управляющих сигналов для доступа к внешней
+            памяти и устройствам ввода/вывода. Выполняет предварительное извлечение
+            инструкций из памяти в очередь
+            \item \textbf{Блок инструкций}, IU (Instruction Unit)~--- извлекает инструкции
+            из очереди, декодирует их и помещает в другую очередь (глубиной 3)
+            декодированных инструкций для EU
+        \end{spacing}
+        \end{footnotesize}
+        \pause
+    \end{itemize}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}[c]{0.4\textwidth}
+            \begin{itemize}
+                \begin{footnotesize}
+                \begin{spacing}{0.8}
+                    \item \textbf{Блок исполнения}, EU (Execution Unit)~--- исполняет инструкции
+                    \item \textbf{Блок адресов}, AU (Address Unit)~--- предоставляет управление памятью
+                    и защиту для CPU, транслируя логические адреса в физические для BU
+                \end{spacing}
+                \end{footnotesize}
+            \end{itemize}
+        \end{column}
+        \begin{column}[c]{0.6\textwidth}
+            \includegraphics[height=4cm, keepaspectratio]{80286InternalBlockDiagramm.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд Intel 80286 - конвейер
+\begin{frame}{Intel 80286~--- конвейер}
+    Наличие отдельных блоков позволяет организовать конвейер, повышающий производительность процессора
+
+    \includegraphics[width=10cm, keepaspectratio]{80286Pipeline.png}
+\end{frame}
+
+% Слайд Intel 80286 - режимы работы
+\begin{frame}{Intel 80286~--- режимы работы}
+    \begin{itemize}
+        \item 8086 Real-Address Mode
+        \begin{itemize}
+            \item Адресация до 1М с использованием 20 разрядов шины адреса
+        \end{itemize}
+        \item Protected Virtual-Address Mode
+        \begin{itemize}
+            \item Защищенный режим, позволяющий адресовать до 16Мб
+             ($2^{24}$) физической памяти (до 1Гб ($2^{30}$) виртуальной памяти)
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+% Слайд Intel 80286 - организация памяти
+\begin{frame}{Intel 80286~--- организация памяти}
+    \begin{itemize}
+        \item Виртуальное адресное пространство~--- организация памяти с точки
+        зрения приложения
+        \item В реальном режиме приложение напрямую <<видит>> всю память,
+        виртуальное адресное пространство совпадает с физическим
+        \item В защищенном режиме приложения не имеют прямого доступа к памяти.
+        Для них память представляется как большое виртуальное адресное
+        пространство размером 1Гб
+        \item Виртуальная адресное пространство представляется как набор
+        до 16К линейных подпространств с определенным размером (сегмент).
+        Размер сегмента может меняться от одного байта до 64 килобайт
+    \end{itemize}
+\end{frame}
+
+% Слайд Intel 80286 - организация памяти 2
+\begin{frame}{Intel 80286~--- организация памяти}
+    \begin{itemize}
+        \begin{spacing}{0.9}
+        \begin{footnotesize}
+            \item В реальном режиме содержимое сегментных регистров
+        интерпретируется как физический адрес начала соответствующего сегмента
+        \item В защищенном режиме содержимое регистра сегментов
+        представляет собой <<селектор>> сегмента
+        \item Селектор~--- это индекс (14 бит), который указывает на адрес
+        начала сегмента (всего может быть $2^{14}$ сегментов) в таблице
+        дескрипторов и 2 бита, которые описывают свойства сегмента (RPL,
+        Requested Privilege Level).
+        \item Один бит индекса селектора определяет глобальное адресное
+        пространство или локальное адресное пространство
+        \begin{itemize}
+            \begin{footnotesize}
+            \item Глобальное адресное пространство используется для
+            общеупотребительных процедур, включая операционные системы,
+            библиотеки, которые доступны всем приложениям. GDT (global descriptor
+            table)~--- таблица глобальных дескрипторов для глобальных сегментов
+            \item Локальное адресное пространство принадлежит только
+            одному приложению. LDT (local description table)~--- таблиц локальных
+            дескрипторов для локальных сегментов (может быть несколько
+            таких таблиц)
+            \end{footnotesize}
+        \end{itemize}
+        \item Тринадцать бит индекса определяют сегмент в таблице дескрипторов
+        \end{footnotesize}
+        \end{spacing}
+    \end{itemize}
+\end{frame}
+
+% Слайд Intel 80286 - таблица дескрипторов сегментов
+\begin{frame}{Intel 80286~--- таблица дескрипторов сегментов}
+    \begin{itemize}
+        \item Каждая запись в таблице дескрипторов состоит из 8 байт и описывает
+        соответствующий сегмент
+        \item Сегментные дескрипторы, описывают обычные сегменты
+        (данные, код, стек) ($S=1$)
+        \item Специальный или системный дескриптор ($S=0$, например,
+        описывает сегмент, где хранится LDT и т.п.)
+    \end{itemize}
+
+    \includegraphics[width=7cm, keepaspectratio]{80286SegmentDescription.png}
+\end{frame}
+
+% Слайд Intel 80286 - дескриптор сегмента
+\begin{frame}{Intel 80286~--- дескриптор сегмента}
+    \begin{itemize}
+        \item Limit~--- размер сегмента
+        \item Base~--- адрес начала сегмента
+        \item Type~--- тип сегмента и информация о доступе
+        \item DPL~--- уровень привилегий дескриптора
+    \end{itemize}
+
+    \includegraphics[width=6cm, keepaspectratio]{80286SegmentDescriptionDetailCodeSegment.png}
+    \includegraphics[width=6cm, keepaspectratio]{80286SegmentDescriptionDetailDataSegment.png}
+\end{frame}
+
+% Слайд Intel 80286 - трансляция адресов
+\begin{frame}{Intel 80286~--- трансляция адресов}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}[c]{0.5\textwidth}
+            \begin{itemize}
+                \begin{footnotesize}
+                    \item Для хранения базы сегментов GDT и LDT используются
+                    специальные регистры GDTR (40-бит, Base (24) и Limit (16)) и LDTR
+                    \item Значение регистра LDTR (56 бит: Base, Limit, Visible Selector,
+                    кэшируется) перезаписывается при переключении задачи
+                    \item Таблица векторов прерываний также хранится в отдельном
+                    сегменте, адрес которой содержится в регистре IDTR
+                    (40-бит, Limit и Base)
+                    \end{footnotesize}
+            \end{itemize}
+        \end{column}
+        \begin{column}[c]{0.5\textwidth}
+            \includegraphics[width=7cm, keepaspectratio]{80286AddressTranslation.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд Intel 80286 - механизмы защиты
+\begin{frame}{Intel 80286~--- механизмы защиты памяти}
+    \begin{itemize}
+        \begin{footnotesize}
+        \item Аспекты защиты
+        \begin{itemize}
+            \begin{footnotesize}
+            \item Изоляция системного кода (например, выполнение
+            операций I/O) от пользовательского
+            \item Изоляция задач пользователей друг от друга
+            \item Проверка данных
+            \end{footnotesize}
+        \end{itemize}
+        \item Механизмы защиты основываются на понятии <<иерархия доверия>>
+        \item Введены четыре уровня привилегий: уровень 0~--- самый
+        доверенный, уровень 4~--- наименее доверенный
+        \item Все сегменты данных и сегменты кода отнесены к одному
+        из четырех уровней (DPL)
+        \item Приложение (задача, task) выполняется в одном из
+        четырех уровней, при этом не может обращаться к данным из
+        более высокого уровня доверия или вызывать процедуры
+        из более низкого уровня привилегий
+        \item У каждой задачи есть текущий уровень
+        привилегий (СPL, 2 бита), определяется по селектору сегмента кода
+        \item При загрузке сегмента (дескриптора) сравнивается его DPL и CPL задачи
+        \end{footnotesize}
+    \end{itemize}
+\end{frame}
+
+% Слайд Intel 80386
+\begin{frame}{Intel 80386}
+    \begin{itemize}
+        \begin{spacing}{0.8}
+            \item 1985 год~--- 32-разрядный процессор (DX)
+            \item 32-разрядные шины адреса и данных, до 4Гб ($2^{32}$) физической
+            памяти, до 64Тб ($2^{46}$) виртуальной памяти
+            \item Частота 12-40 МГц, технология 1.5-1.0 мкм, 275000 транзисторов
+            \item Почти все регистры 32-битные (за исключением сегментных).
+            Увеличено количество регистров (+11)
+            \item Набор инструкций расширен в основном за счет появления
+            32-битных вариантов существующих команд
+        \end{spacing}
+        \pause
+    \end{itemize}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}[c]{0.5\textwidth}
+        %     \begin{figure}[htp]
+        %         \centering
+                \includegraphics[height=2cm, keepaspectratio]{80386Face.jpg}
+            % \end{figure}
+        \end{column}
+        \begin{column}[c]{0.5\textwidth}
+            % \begin{figure}[htp]
+            %     \centering
+                \includegraphics[width=2cm, keepaspectratio]{80386UnFace.jpg}
+            % \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд Intel 80386 - внутренняя архитектура
+\begin{frame}{Intel 80386: внутренняя архитектура}
+    \includegraphics[width=13cm, keepaspectratio]{80386FunctionalUnits.png}
+\end{frame}
+
+% Слайд Intel 80386 - внутренняя архитектура
+\begin{frame}{Intel 80386: внутренняя архитектура}
+    \begin{itemize}
+        \begin{footnotesize}
+        \begin{spacing}{0.8}
+        \item \textbf{Bus Interface Unit}~--- интерфейс между ЦПУ и <<внешним>>
+        миром, извлекает инструкции, обеспечивает пересылку данных,
+        управляет взаимодействием с внешними контроллерами системной шины
+        \item \textbf{Code Prefetch Unit}~--- посылает команды BIU для извлечения
+        возможных следующих инструкций программы. 16 байтовая очередь
+        (Code Queue)
+        \item \textbf{Instruction Decode Unit}~--- извлекает инструкции из очереди
+        и транслирует их в микрокод. Декодированные инструкции хранятся
+        в очереди (Instruction Queue)
+        \item \textbf{Execution Unit}~--- исполняет инструкции из очереди
+        Instruction Queue, взаимодействуя с остальными блоками
+            \begin{itemize}
+                \begin{tiny}
+                \begin{spacing}{0.8}
+                \item \textbf{Control Unit}~--- содержит микрокод и быстродействующие
+                параллельные схемы для выполнения операций умножения, деления,
+                вычисления адресов
+                \item \textbf{Data Unit}~--- содержит АЛУ, восемь 32-битных
+                регистров общего назначения,  64-битное устройство сдвига;
+                выполняет команды по запросу от Control Unit
+                \item \textbf{Protection Test Unit}~--- выполняет проверку
+                доступа к сегментам с помощью микрокода
+                \end{spacing}
+                \end{tiny}
+            \end{itemize}
+        \item \textbf{Segmentation Unit}~--- преобразует логические адреса в
+        линейное адресное пространство по запросу Execution Unit.
+        Полученные адреса передаются в блок Paging Unit. Содержит кэш
+        таблицы дескрипторов сегментов. Также выполняет проверку доступа
+        к сегментам
+        \item \textbf{Paging Unit}~--- транслирует адреса из линейного адресного
+        пространства в физические адреса, после этого передает их в
+        блок Bus Inferface Unit
+        \end{spacing}
+        \end{footnotesize}
+    \end{itemize}
+\end{frame}
+
+% Слайд Intel 80386 - режимы работы
+\begin{frame}{Intel 80386: режимы работы}
+    \begin{itemize}
+        \item \textbf{Real-Address Mode (Real Mode)}~--- реальный режим,
+        соответствует 8086 с несколькими новыми инструкциями
+        \item \textbf{Protected Mode}~--- защищенный режим, доступны
+        все инструкции и возможности процессора
+        \item \textbf{Virtual 8086 Mode (V88 mode)}~--- динамический
+        режим, в котором происходит переключение между реальным режимом
+        и защищенным режимом
+    \end{itemize}
+\end{frame}
+
+% Слайд Intel 80386 - организация памяти
+\begin{frame}{Intel 80386: организация памяти}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}[c]{0.7\textwidth}
+            \begin{itemize}
+            \begin{footnotesize}
+            \begin{spacing}{0.8}
+            \item Адреса в программах не зависят от физического адресного пространства
+            \item ~«Плоская» (flat) модель – память для приложения представлена как единый массив размером 4Гб
+            \item Сегментная модель – память рассматривается как набор 16383 сегментов, каждый их которых имеет длину до 4Гб; адрес состоит из двух частей:
+            \begin{itemize}
+                \begin{footnotesize}
+                \item селектор сегмента (16 бит), который определяет соответствующий сегмент
+                \item смещение (32 бита)
+                 \end{footnotesize}
+            \end{itemize}
+            \item  Преобразование адресов из логического адресного пространства в физическое происходит в два этапа
+            \begin{itemize}
+                \begin{footnotesize}
+                \item Преобразование сегмента: логический адрес преобразуется в линейный
+                \item Преобразование страницы: линейный адрес преобразуется в физический
+                \end{footnotesize}
+            \end{itemize}
+            \end{spacing}
+            \end{footnotesize}
+            \end{itemize}
+        \end{column}
+        \begin{column}[c]{0.3\textwidth}
+            \includegraphics[width=5cm, keepaspectratio]{80386AddressTranslationOverview.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд Intel 80386 - преобразование сегментов
+\begin{frame}{Intel 80386: дескрипторы сегментов}
+    \begin{itemize}
+        \item BASE~--- определяет расположение начала сегмента в 4Гб линейном
+        пространстве
+        \item LIMIT~--- размер сегмента, измеряется в единицах по
+        1 байту или по 4Кб (бит гранулярности)
+    \end{itemize}
+
+    \includegraphics[height=4cm, keepaspectratio]{80386SegmentTranslation.png}
+    \includegraphics[height=4.3cm, keepaspectratio]{80386SegmentDescriptor.png}
+\end{frame}
+
+% Слайд Intel 80386 - преобразование страниц
+\begin{frame}{Intel 80386: преобразование страниц}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}[c]{0.7\textwidth}
+            \begin{itemize}
+            \begin{small}
+            \begin{spacing}{0.8}
+            \item Таблица страниц~--- массив 32-битных идентификаторов
+            (спецификаторов) страниц, занимает 4Кб, определяет 1К страниц
+            \item Каталог страниц~--- массив указателей на таблицу страниц,
+            1К указателей
+            \item Всего 1М страниц по 4К~--- полное физическое адресное
+            пространство ($2^{20}*2^{12} = 2^{32}$)
+            \item Физический адрес текущего каталога страниц хранится в
+            специальном регистре CR3 (PDBR, Page Directory Base Register)
+            \item Может использоваться один каталог страниц для всех задач
+            или отдельный каталог для каждой задачи
+            \end{spacing}
+            \end{small}
+            \end{itemize}
+        \end{column}
+        \begin{column}[c]{0.3\textwidth}
+            \includegraphics[height=3.4cm, keepaspectratio]{80386PageTranslation.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд Intel 80386 - преобразование страниц
+\begin{frame}{Intel 80386: дескриптор страницы}
+    \begin{itemize}
+        \begin{spacing}{0.8}
+        \item Frame~--- страница в оперативной памяти
+        \item ACCESSED и DIRTY могут использоваться операционной системой
+        для алгоритма замещения страниц
+        \item READ/WRITE и USER/SUPERVISOR используются для защиты
+        на уровне страниц
+        \item Только бит P (Present) проверяется аппаратно
+        \item Часто используемые части таблицы страниц хранятся
+        в кэше процессора
+        \end{spacing}
+    \end{itemize}
+    \includegraphics[height=3cm, keepaspectratio]{80386PageTableEntry.png}
+\end{frame}
+
+% Слайд Intel 80386 - мультизадачность
+\begin{frame}{Intel 80386: мультизадачность}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}[c]{0.7\textwidth}
+            \begin{itemize}
+            \begin{small}
+            \begin{spacing}{1}
+            \item Для повышения производительности системы в целом
+            \item В процессоре есть специальные структуры для поддержки многозадачности
+            \begin{itemize}
+                \item Task State Segment: содержимое регистров, селектор TSS предыдущей задачи, селектор LTB, карта I/O
+                \item TSS Descriptor: спецификатор TSS
+                \item Task Register: в нем хранится селектор на TSSD
+                \item Task Gate Descriptor: предоставляет непрямой, защищенный доступ к TSS
+            \end{itemize}
+            \end{spacing}
+            \end{small}
+            \end{itemize}
+        \end{column}
+        \begin{column}[c]{0.3\textwidth}
+            \includegraphics[height=5.4cm, keepaspectratio]{80386TaskRegister.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд Intel 80486
+\begin{frame}{Intel 80486}
+    \begin{itemize}
+        \begin{spacing}{0.8}
+            \item 1989 год~--- 32-разрядный процессор (усовершенствованная версия 80386)
+            \item Встроенный математический сопроцессор
+            \item Частота 16-100 МГц, технология 600-1000 нм, около 1,2М-1,6М транзисторов
+            \item Встроенный кэш первого уровня 8-16Кб
+            \item Гибридное CISC-RISC ядро
+        \end{spacing}
+        \pause
+    \end{itemize}
+
+    \includegraphics[height=2.6cm, keepaspectratio]{80486Face.jpg}
+    \includegraphics[height=2.6cm, keepaspectratio]{80486UnFace.jpg}
+\end{frame}
+
+% Слайд Intel 80486 - внутренняя архитектура
+\begin{frame}{Intel 80486: внутренняя архитектура}
+    \includegraphics[height=7cm, keepaspectratio]{80486FunctionalUnits.png}
+\end{frame}
+
+% Слайд Intel 80486 - конвейер
+\begin{frame}{Intel 80486: конвейер}
+    \begin{itemize}
+        \begin{spacing}{0.8}
+        \item Fetch~--- извлечение инструкции
+        \item Decode~1~--- декодирование инструкции
+        \item Decode~2~--- вычисление <<сложных>> режимов адресации
+        \item Execution~-- исполнение, доступ к кешу, изменение регистров
+        \item Register Write-back~--- изменение регистра флагов, запись других регистров
+    \end{spacing}
+    \end{itemize}
+
+    \includegraphics[height=3.4cm, keepaspectratio]{80486Pipeline.png}
+\end{frame}
+
+% Слайд Intel Pentium
+\begin{frame}{Intel Pentium}
+    \begin{itemize}
+        \begin{spacing}{0.8}
+            \item 1993 год~--- 32-разрядный процессор
+            \item Частота 60-233, технология 800-280 нм, 3.1-4.5 М транзисторов
+            \item 64-х разрядная шина данных
+            \item Суперскалярная архитектура
+        \end{spacing}
+        \pause
+    \end{itemize}
+
+    \includegraphics[height=3.4cm, keepaspectratio]{PentiumFace.jpg}
+    \includegraphics[height=3.4cm, keepaspectratio]{PentiumUnFace.jpg}
+\end{frame}
+
+% Слайд Intel Pentium - внутренняя архитектура
+\begin{frame}{Intel Pentium: внутренняя архитектура}
+    \includegraphics[height=7cm, keepaspectratio]{PentiumFunctionalUnits.png}
+\end{frame}
+
+% Слайд Intel Pentium - конвейер
+\begin{frame}{Intel Pentium: конвейер}
+    \begin{itemize}
+        \item Как и в 80486, конвейер состоит из 5 стадий
+        \begin{itemize}
+            \item PF (Prefetch)
+            \item D1 (Instruction Decode)
+            \item D2 (Address Generate)
+            \item EX (Execute – ALU и доступ к кэшу)
+            \item WR (WriteBack)
+        \end{itemize}
+        \item Два конвейера: \textbf{u} (выполнение любых инструкций)
+        и \textbf{v} (выполнение <<простых>> целочисленных инструкций
+        и инструкции обмена значениями регистров FXCH для чисел с
+        плавающей точкой)~--- \textbf{суперскалярная архитектура}
+        \item Одновременно на конвейеры \textbf{u} и \textbf{v} могут быть помещены только парные инструкции
+        \item Конвейер сопроцессора
+    \end{itemize}
+\end{frame}
+
+% Слайд Intel Pentium - конвейер
+\begin{frame}{Intel Pentium: конвейер}
+    \begin{itemize}
+        \begin{spacing}{0.8}
+        \item Конвейер сопроцессора: 8 стадий
+        \begin{itemize}
+            \begin{footnotesize}
+            \item PF, D1, D2
+            \item EX - чтение из памяти и регистров, преобразование FP данных для записи в память, запись в память)
+            \item X1 – первая стадия выполнения инструкции
+            \item X2 – вторая стадия выполнения инструкции
+            \item WF – округление и запись результата в регистр
+            \item ER – отчет об ошибке/изменение статусного слова
+            \end{footnotesize}
+        \end{itemize}
+        \item Одновременно на конвейер могут помещаться
+        только <<совместимые>> инструкции
+        \end{spacing}
+    \end{itemize}
+
+    \includegraphics[height=3cm, keepaspectratio]{PentiumPipelineInstructions.png}
+    \includegraphics[height=2.6cm, keepaspectratio]{PentiumPipelines.png}
+\end{frame}
+
+
+% Слайд Intel Pentium - предсказание ветвлений
+\begin{frame}{Intel Pentium: конвейер}
+    \begin{itemize}
+        \begin{spacing}{0.8}
+        \item На стадии PF реализованы два буфера, в которые помещаются инструкции при извлечении из памяти
+        \begin{itemize}
+            \item Линейная последовательность
+            \item Возможный переход
+        \end{itemize}
+        \item Для определения возможного перехода используется
+        Branch Target Buffer
+        \item Branch Prediction Buffer (256 элементов)~--- запоминается
+        статистика совершения перехода в инструкции
+        \item Каждый элемент содержит адрес инструкции (source), бит
+        валидности, биты истории (2) и адрес перехода (target)
+        \item Переход считается предсказанным, если запись в BTB
+        найдена, бит валидности установлен и биты истории $> 1$
+        \item Биты истории увеличиваются на 1 при каждом успешном
+        переходе, уменьшаются при каждом невыполненном переходе
+        \end{spacing}
+    \end{itemize}
+\end{frame}
+
+% Слайд проблемы конвейеров
+\begin{frame}{Проблемы конвейера и суперскаляров}
+    \begin{itemize}
+        \item \textbf{Структурные проблемы}: инструкциям для
+        выполнения нужны ресурсы внутри процессора, но эти ресурсы
+        могут быть заняты
+        \item \textbf{Проблемы данных}: инструкции зависят
+        от данных, которые будут вычислены более ранними инструкциями
+        \item \textbf{Проблемы управления}: будет или нет осуществлено
+        выполнение инструкции зависит от решения, принятого ранней
+        инструкцией (переходы)
+    \end{itemize}
+    Возникновение той или иной проблемы приводит в лучшем случае,
+    к приостановке конвейера/конвейеров, в худшем~--- к его/их полной
+    очистке
+\end{frame}
+
+\end{document}
