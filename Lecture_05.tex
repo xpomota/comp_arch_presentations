@@ -1,0 +1,393 @@
+\documentclass[aspectratio=169,14pt]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[main=russian,english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[labelformat=empty]{caption}
+\usepackage{multimedia}
+\usepackage{xcolor}
+\usepackage{setspace}
+
+\usetheme{Singapore}
+
+\definecolor{urlcolor}{HTML}{799B03} % цвет гиперссылок
+\hypersetup{urlcolor=urlcolor, colorlinks=true}
+
+\graphicspath{{../Images/}}
+
+\title{Центральные процессоры: Pentium Pro - MIPS }
+
+\begin{document}
+
+% Слайд Intel Pentium Pro
+\begin{frame}{Intel Pentium Pro}
+    \begin{itemize}
+        \begin{footnotesize}
+        \begin{spacing}{0.8}
+        \item 1995 год~--- шестое поколение (архитектура P6)~--- RISC ядро
+        \item Частота 150-200 МГц, 500-350 нм, 5,5М ядро, 21М-67,5М транзисторов
+        (совместно с кэшем)
+        \item Шина адреса 36-битная
+        \item Кэш второго уровня L2 (256Кб~- 1Мб)
+        \item Микроархитектура динамического исполнения (Dynamic Execution
+        Architecture)
+        \item Пять параллельных блоков исполнения (два целочисленных, два FPU,
+        один для операций с памятью)
+        \item Двойная независимая шина
+        \item Поддержка многопроцессорных систем
+        \end{spacing}
+        \end{footnotesize}
+    \end{itemize}
+    \includegraphics[height=2.4cm, keepaspectratio]{PentiumProFace.jpg}
+    \includegraphics[height=2.4cm, keepaspectratio]{PentiumProUnFace.jpg}
+    \includegraphics[height=2.4cm, keepaspectratio]{PentiumProOpened.jpg}
+\end{frame}
+
+% Слайд Pentium vs Pentium Pro
+\begin{frame}{Intel Pentium vs Pentium Pro}
+    Внутрь кристалла интегрирован кэш второго уровня,
+    APIC (контроллер прерываний) и контроллер памяти
+
+    \includegraphics[height=5.3cm, keepaspectratio]{PentiumVSPentiumPro.png}
+\end{frame}
+
+% Слайд Pentium Pro: внутренняя архитектура
+\begin{frame}{Pentium Pro: внутренняя архитектура}
+    \begin{figure}[htp]
+        \centering
+        \includegraphics[height=7.1cm, keepaspectratio]{PentiumProFunctionalUnits.png}
+    \end{figure}
+\end{frame}
+
+% Слайд Pentium Pro: пул инструкций
+\begin{frame}{Pentium Pro: пул инструкций}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.6\textwidth}
+            \begin{itemize}
+                \begin{footnotesize}
+                \item Длина конвейера~--- 12 стадий
+                \item Разделение стадии исполнения на стадии Диспетчеризация / Исполнения и удаления
+                \item Блок Диспетчеризации / Исполнения выбирает операции микрокода
+                из пула в зависимости от их статуса и готовности операндов,
+                после чего помещает их в очередь исполнения на соответствующий
+                ресурс внутри этого блока. Результат помещается обратно в пул
+                инструкций
+                \item Блок удаления (Retire) фиксирует инструкции, удаляет
+                их из пула и восстанавливает правильный порядок инструкций
+                \end{footnotesize}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \includegraphics[height=6.8cm, keepaspectratio]{PentiumProInstructionPool.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд Pentium Pro: микроархитектура динамического исполнения
+\begin{frame}{Pentium Pro: микроархитектура динамического исполнения}
+    \begin{itemize}
+        \item Глубокое предсказание ветвлений
+        \begin{itemize}
+            \item динамическое предсказание: использование буферов BTB
+            \item статическое предсказание: переходы назад сбудутся,
+            вперед~--- нет
+        \end{itemize}
+        \item Динамический анализ потоков данных для поиска возможности
+        выполнения инструкций вне порядка и восстановления их порядка
+        следования
+        \item Спекулятивные вычисления
+    \end{itemize}
+\end{frame}
+
+% Слайд Pentium MMX
+\begin{frame}{Pentium MMX}
+    \begin{itemize}
+        \item MMX (MultiMedia eXtension)~--- ориентирована на
+        приложения мультимедиа, 2D/3D графику
+        \item Реализация технологии SIMD (Single Instruction~--- Multiple
+         Data)~--- одновременная обработка нескольких элементов
+         данных за одну инструкцию
+        \begin{itemize}
+            \item Восемь 64-разрядных регистра (М0-М7)
+            \item Одна инструкция может выполнять действия сразу
+            над всеми комплектами операндов (8,4,2 или 1), которые
+            размещены в этих регистрах
+            \item 57 дополнительных инструкций
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+% Слайд Pentium II
+\begin{frame}{Pentium II}
+    \begin{itemize}
+        \item 1997 год~--- модифицированное ядро P6 (Pentium Pro) + блок ММХ
+        \item Частота 233-400 МГц; 7,5~--- 27М транзисторов;
+        350-180 нм
+    \end{itemize}
+    \includegraphics[height=5cm, keepaspectratio]{PentiumIIFace.jpg}
+\end{frame}
+
+% Слайд Pentium III
+\begin{frame}{Pentium III}
+    \begin{itemize}
+        \item 1999 год~--- поколение P6, модифицированное ядро
+        Deschutes, которое использовалось в Pentium II
+        \item Частота 450-1400 ГГц;  9,5М-44М транзисторов; 250-130 нм
+        \item Улучшенная технология SIMD (технология SSE)
+        \item Pentium III на ядре Tualatin~--- аппаратная
+        предвыборка данных
+    \end{itemize}
+    \includegraphics[height=3cm, keepaspectratio]{PentiumIIIFace.jpg}
+    \includegraphics[height=3cm, keepaspectratio]{PentiumIIIUnface.jpg}
+\end{frame}
+
+% Слайд Pentium III: внутренняя архитектура
+\begin{frame}{Pentium III: внутренняя архитектура}
+    \begin{figure}[htp]
+        \centering
+        \includegraphics[height=7.1cm, keepaspectratio]{PentiumIIIFunctionalUnits.png}
+    \end{figure}
+\end{frame}
+
+% Слайд Pentium III: SSE
+\begin{frame}{Pentium III: SSE}
+    \begin{itemize}
+        \item SSE - Streaming SIMD Extensions – потоковое расширение SIMD
+        \item Данная технология решает две проблемы MMX:
+        \begin{itemize}
+            \item При использовании MMX невозможно использовать
+            инструкции сопроцессора (поскольку задействованы
+            одинаковые регистры)
+            \item MMX работает только с целыми числами
+        \end{itemize}
+        \item Восемь 128-битных регистра и набор инструкций, работающих со скалярными и упакованными типами данных
+    \end{itemize}
+\end{frame}
+
+% Слайд Pentium 4
+\begin{frame}{Pentium 4}
+    \begin{itemize}
+        \item 2000 год~--- архитектура седьмого поколения NetBurst (P68)
+        \item Частота 1300-3800МГц, 42-188М транзисторов, технология 180-65 нм
+        \item Гиперконвейер~--- большое число стадий, что дает
+        возможность для повышения частоты
+    \end{itemize}
+    \begin{figure}[htp]
+        \centering
+        \includegraphics[height=4cm, keepaspectratio]{Pentium4Face.jpg}
+    \end{figure}
+\end{frame}
+
+% Слайд Pentium 4: внутренняя архитектура
+\begin{frame}{Pentium 4: внутренняя архитектура}
+    \begin{figure}[htp]
+        \centering
+        \includegraphics[height=6.9cm, keepaspectratio]{Pentium4FunctionalUnits.png}
+    \end{figure}
+\end{frame}
+
+% Слайд Pentium 4: Гиперконвейер
+\begin{frame}{Pentium 4: Гиперконвейер}
+    \begin{itemize}
+        \item Глубина: 20 (31 на ядрах Prescott и Cedar) стадий, в связи
+        с применением кэша последовательностей микроопераций, декодер
+        вынесен за пределы конвейера
+        \item Позволяет достигать высоких тактовых частот
+        \item Недостатки:
+        \begin{itemize}
+            \item уменьшение удельной производительности (за один
+            такт меньшее количество инструкций)
+            \item существенные потери производительности при
+            интрукциях перехода или кэш-промахе
+        \end{itemize}
+        \item Увеличенный буфер предсказания ветвлений
+    \end{itemize}
+\end{frame}
+
+% Слайд Pentium 4: кэш последовательности микроопераций
+\begin{frame}{Pentium 4: кэш последовательности микроопераций}
+    \begin{itemize}
+        \item Перед исполнением инструкции из набора x86 преобразуются
+        в набор внутренних команд (микроопераций)
+        \item Отказ от кэша кода и хранение в кэше
+        последовательности микроопераций
+        \item Операция cохранения (store) разделена на операции
+        сохранения данных и сохранения адреса
+    \end{itemize}
+    \includegraphics[height=2.9cm, keepaspectratio]{Pentium4PipelineStructure.png}
+\end{frame}
+
+% Слайд Pentium 4: Hyper-Threading
+\begin{frame}{Pentium 4: Hyper-Threading}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.65\textwidth}
+            \begin{itemize}
+                \begin{tiny}
+                \begin{spacing}{0.8}
+                \item Для увеличения производительности используются различные подходы:
+                конвейеризация, суперскалярность, увеличение кэш-памяти, исполнение вне порядка следования команд
+                \item Hyper-Threading~-- иной подход: попытка более полно загрузить внутренние ресурсы процессора
+                \item Процессор выполняет одновременно более одного потока (приложения)
+                \item Физический процессор воспринимается операционной системой и приложениями как два логических процессора
+                \item Необходима поддержка со стороны операционной системы
+                \end{spacing}
+                \end{tiny}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \includegraphics[height=3.5cm, keepaspectratio]{Pentium4H-T.png}
+        \end{column}
+    \end{columns}
+        \includegraphics[width=7.4cm]{Pentium4H-TPipeline.png}
+\end{frame}
+
+% Слайд Intel Core 2
+\begin{frame}{Intel Core 2}
+    \begin{itemize}
+        \begin{footnotesize}
+        \item 2006~---  Intel Core 2, 64-разрядные процессоры, набор команд Intel~64
+        \item Несколько процессорных ядер
+        \item Архитектура Intel Core
+        \begin{itemize}
+            \begin{footnotesize}
+            \item Широкое динамическое исполнение
+            \item Уменьшение потребления питания
+            \item Улучшенный доступ к кэш-памяти
+            \item Улучшенный доступ к памяти
+            \item Выполнение 128 битный SIMD-инструкций за один такт
+            \end{footnotesize}
+        \end{itemize}
+        \end{footnotesize}
+    \end{itemize}
+    \begin{figure}[htp]
+        \centering
+        \includegraphics[height=3.2cm, keepaspectratio]{Core2FloorPlan.png}
+    \end{figure}
+\end{frame}
+
+% Слайд Intel Core: внутренняя архитектура
+\begin{frame}{Intel Core: внутренняя архитектура}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[height=5.2cm, keepaspectratio]{CoreDuoWideDynamicExecution.png}
+                \caption{Ядра Intel Core}
+            \end{figure}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[height=5.2cm, keepaspectratio]{CoreMicroarchitecture.png}
+                \caption{Архитектура ядра Intel Core}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд MIPS архитектура
+\begin{frame}{MIPS архитектура}
+    \begin{itemize}
+        \begin{footnotesize}
+        \begin{spacing}{0.8}
+        \item MIPS (Microprocessor without Interlocked Pipeline Stages)~--- микропроцессор без блокирующегося конвейера
+        \item Представлен в 1981 году, модификации MIPS I, MIPS II, MIPS III, MIPS IV, MIPS V, MIPS32 и MIPS64
+        \item Смартфоны, маршрутизаторы, принтеры, игровые консоли и т.п.
+        \item Типичный представитель RISC (Reduced Instruction Set Computers) архитектуры:
+        \begin{itemize}
+            \begin{footnotesize}
+            \item короткий цикл
+            \item эффективное использование площади кристалла из-за простого набора команд
+            \item возможность применения новых технологий изготовления полупроводников
+            \end{footnotesize}
+        \end{itemize}
+        \item R4000~--- 64 разрядный процессор, 64 разрядное ALU и FPU,
+        64 разрядные регистры, 64 разрядное виртуальное адресное пространство
+        \end{spacing}
+        \end{footnotesize}
+    \end{itemize}
+    \includegraphics[height=2.8cm, keepaspectratio]{MIPSR4000Face.png}
+    \includegraphics[height=2.8cm, keepaspectratio]{MIPSR4000UnFace.png}
+\end{frame}
+
+% Слайд MIPS внутренняя архитектура
+\begin{frame}{MIPS внутренняя архитектура}
+    \begin{columns}
+        \begin{column}{0.35\textwidth}
+            \begin{itemize}
+                \item 32 регистра общего назначения
+                \item 3 специальных регистра
+                \item Инструкции фиксированной длины
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.65\textwidth}
+            \includegraphics[height=7cm, keepaspectratio]{MIPSR4000FunctionalUnits.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд MIPS R4000: виртуальная память
+\begin{frame}{MIPS R4000: виртуальная память}
+    \begin{columns}
+        \begin{column}{0.55\textwidth}
+            \begin{itemize}
+                \begin{footnotesize}
+                \begin{spacing}{0.9}
+                \item ASID (Address Space Identifier)~--- идентификатор адресного пространства уменьшает количество очисток TLB и соотносит адресное пространство с процессом
+                \item Отдельные адресные пространства USER, KERNEL и SUPERVISOR
+                \item Размер VPN (Virtual Page Number) зависит от размера страницы
+                \end{spacing}
+                \end{footnotesize}
+
+                \includegraphics[width=5.5cm, keepaspectratio]{MIPSR4000MemoryAddress.png}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.45\textwidth}
+            \begin{figure}[c]
+                \includegraphics[height=5.8cm, keepaspectratio]{MIPSR4000AddressSpacesKernelMode.png}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд MIPS R4000: конвейер
+\begin{frame}{MIPS R4000: конвейер}
+    \begin{itemize}
+        \item Целочисленный
+        \item Для операций с плавающей точкой (FPU)
+    \end{itemize}
+
+    \begin{figure}[c]
+        \centering
+        \includegraphics[width=7cm, keepaspectratio]{MIPSR4000IntegerPipeLine.png}
+        \caption{\footnotesize{Целочисленный конвейер}}
+    \end{figure}
+
+    \begin{figure}[c]
+        \centering
+        \includegraphics[height=2cm, keepaspectratio]{MIPSR4000FPPipeLine.png}
+        \caption{\footnotesize{Конвейер FPU}}
+    \end{figure}
+\end{frame}
+
+% Слайд ARM Cortex-A8
+\begin{frame}{ARM Cortex-A8}
+    \begin{itemize}
+        \item 32-х битный процессор, архитектура ARM v7-A
+        \item Два конвейера
+        \item Интегрированный кеш L2
+        \item 600 MHz~--- 1 GHz и выше
+        \item RICS архитектура
+    \end{itemize}
+\end{frame}
+
+% Слайд ARM Cortex-A8: внутренняя архитектура
+\begin{frame}{ARM Cortex-A8: внутренняя архитектура}
+    \begin{figure}[c]
+        \centering
+        \includegraphics[width=9.2cm, keepaspectratio]{CortexA8FunctionalUnits.png}
+    \end{figure}
+\end{frame}
+
+
+\end{document}
