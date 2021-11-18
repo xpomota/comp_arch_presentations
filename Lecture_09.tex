@@ -1,0 +1,690 @@
+\documentclass[aspectratio=169,14pt]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[main=russian,english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[labelformat=empty]{caption}
+% \usepackage{listings}
+\usepackage{multimedia}
+\usepackage{xcolor}
+% \usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{verbatim}
+\usepackage{multirow}
+
+\usetheme{Singapore}
+
+\definecolor{urlcolor}{HTML}{799B03} % цвет гиперссылок
+\hypersetup{urlcolor=urlcolor, colorlinks=true}
+
+\graphicspath{{../Images/}}
+
+\title{История ОС. Основные понятия ОС}
+
+\begin{document}
+
+% Слайд Процессы
+\begin{frame}{Процессы}
+    \begin{itemize}
+        \begin{footnotesize}
+        \item Процесс~--- абстрактное понятие, описывающее выполнение
+        программы процессором
+        \item Процесс~--- выполняемая программа, включая значения
+        регистров, адресное пространство, стек, открытые файлы и прочие ресурсы
+        \item Многозадачность~--- возможность одновременного использования
+        различных ресурсов машины (процессор, память, устройства ввода/вывода)
+        разными приложениями
+        \item В многопроцессорных (многоядерных) системах выполнение процессов
+        действительно происходит одновременно
+        \item В системах с одним процессором для реализации многозадачности
+         в памяти должны находиться несколько процессов. В определённые
+         моменты времени происходит переключение между ними, т.е. выбор
+         одного из процессов и его выполнение
+        \end{footnotesize}
+    \end{itemize}
+\end{frame}
+
+% Слайд Многозадачность
+\begin{frame}{Многозадачность}
+    \begin{figure}[htp]
+        \centering
+        \includegraphics[height=7cm, keepaspectratio]{OSMultiTaskAdvantage.png}
+    \end{figure}
+\end{frame}
+
+% Слайд Создание процесса
+\begin{frame}{Создание процесса}
+    \begin{itemize}
+        \item При инициализации системы процесс создаётся загрузчиком
+        путём загрузки кода (части операционной системы) и передачи
+        ему управления
+        \item Последующее создание процессов происходит с помощью
+        системных вызовов, например, при:
+        \begin{itemize}
+            \item вводе команды в консоли (командой строке);
+            \item двойном щелчке на иконке;
+            \item непосредственном использовании системного вызова
+            в коде.
+        \end{itemize}
+        \item Системный вызов \textbf{fork}~--- создание процесса,
+        аналогичного родительскому
+        \item Системный вызов \textbf{execv (execl)}~--- загрузка
+        новой программы в память
+    \end{itemize}
+\end{frame}
+
+% Слайд Завершение процесса
+\begin{frame}{Завершение процесса}
+    \begin{itemize}
+        \item Способы завершения процесса
+        \begin{itemize}
+            \item Нормальное завершение, добровольное
+            \item Завершение вследствие ошибки, добровольное
+            \item Завершение вследствие фатальной ошибки,
+            принудительное
+            \item Уничтожение другим процессом, принудительное
+        \end{itemize}
+        \item Системные вызовы \textbf{exit}, \textbf{kill}
+    \end{itemize}
+\end{frame}
+
+% Слайд Состояние процесса
+\begin{frame}{Состояние процесса}
+    \begin{itemize}
+        \begin{footnotesize}
+            \item Действие (процесс использует процессор)
+            \item Готовность (процесс временно приостановлен, чтобы
+            позволить выполняться другому процессу)
+            \item Блокировка (процесс не может быть запущен прежде, чем
+            произойдет какое-либо внешнее событие)
+            \item Переход 1 осуществляется при выполнении операции ввода/вывода
+            или при системном вызове (\textbf{sleep})
+            \item Переход 4 осуществляется при возникновении внешнего события
+            (окончание операции ввода/вывода, системный вызов \textbf{wakeup})
+            \item Переходы 2, 3 выполняет планировщик~--- специальная подсистема
+            внутри ОС
+            \begin{figure}[htp]
+                \centering
+                \includegraphics[height=3cm, keepaspectratio]{OSProccessStateTypical.png}
+            \end{figure}
+        \end{footnotesize}
+    \end{itemize}
+\end{frame}
+
+% Слайд Жизненный цикл процесса
+\begin{frame}{Жизненный цикл процесса}
+    \begin{itemize}
+        \begin{footnotesize}
+            \item В режиме ядра исполняется только код ядра, не процесса
+            \item Zombie~--- завершившийся процесс, для которого процесс-родитель
+            не может принять сигнал о завершении процесса)
+        \end{footnotesize}
+        \begin{figure}[htp]
+            \centering
+            \includegraphics[height=5.6cm, keepaspectratio]{OSProcessLifeTime.png}
+        \end{figure}
+    \end{itemize}
+\end{frame}
+
+% Слайд Реализация процессов
+\begin{frame}{Реализация процессов}
+    \begin{itemize}
+        \begin{footnotesize}
+            \item Таблица процессов~--- каждый элемент таблицы описывает
+            отдельный процесс
+            \item \textbf{MINIX3}~--- три раздела в таблице процессов для
+            разных целей
+        \end{footnotesize}
+    \end{itemize}
+    \begin{tiny}
+        \begin{tabular}{p{3.6cm}p{4.4cm}p{4.4cm}}
+            \hline
+            \textbf{Ядро} & \textbf{Управление процессами} & \textbf{Управление файлами} \\ \hline
+            Регистры & Указатель на текстовый сегмент & Маска UMASK \\
+            Счетчик команд & Указатель на сегмент данных & Корневой каталог \\
+            Слово состояния программы & Указатель на сегмент стека &  Рабочий каталог \\
+            Указатель стека &  Статус завершения &  Дескрипторы файлов \\
+            Состояние процесса & Состояние сигналов & Реальный идентификатор пользователя\\
+            Текущий приоритет &  Идентификатор процесса & Эффективный идентификатор пользователя \\
+            Максимальный приоритет &  Родительский процесс & Реальный идентификатор группы \\
+            Оставшееся число тактов &  Группа процессов & Эффективный идентификатор группы \\
+            Размер кванта &  Процессорное время дочернего процесса & Управление \\
+            Использованное процессорное время & Реальный идентификатор пользователя (UID) & Область сохранения для чтения/записи \\
+            Указатели очереди сообщений & Эффективный идентификатор пользователя & Параметры системного вызова \\
+            Биты действующих сигналов &  Реальный идентификатор группы (GUID) & Различные битовые флаги \\
+            Различные флаги & Эффективный идентификатор группы &  \\
+            Имя процесса & Файловая информация о совместном использовании текста &  \\
+            & Битовый маски для сигналов &  \\
+            & Различные битовые флаги &  \\
+            & Имя процесса &  \\
+        \end{tabular}
+    \end{tiny}
+\end{frame}
+
+% Слайд Переключение процессов
+\begin{frame}{Переключение процессов}
+    \begin{itemize}
+        \begin{spacing}{0.8}
+        \begin{footnotesize}
+            \item Дескриптор процесса~--- информационная структура, в которой
+            представлена внешняя (по отношению к процессу) информация
+            \begin{itemize}
+                \begin{tiny}
+                \begin{spacing}{0.9}
+                    \item Идентификатор процесса
+                    \item Состояние процесса
+                    \item Информация о привилегиях процесса
+                \end{spacing}
+            \end{tiny}
+            \end{itemize}
+            \item Контекст процесса~--- содержит информацию о внутреннем
+            состоянии процесса и аппаратуры
+            \begin{itemize}
+                \begin{tiny}
+                \begin{spacing}{1.0}
+                    \item Содержимое регистров
+                    \item Информация об открытых файлах
+                    \item Информация о работе внешних устройств
+                \end{spacing}
+                \end{tiny}
+            \end{itemize}
+            \item Аппаратный контекст~--- набор данных, который должен быть
+            загружен в регистры до возобновления работы процесса
+            \item Linux
+            \begin{itemize}
+                \begin{tiny}
+                \begin{spacing}{1.0}
+                    \item Переключение глобального каталога страниц
+                    с целью установки адресного пространства
+                    \item Переключение стека режима ядра и аппаратного
+                    контекста
+                \end{spacing}
+                    \begin{itemize}
+                        \begin{tiny}
+                        \begin{spacing}{1.0}
+                            \item В ранних версиях: аппаратно, far jmp (переход
+                            на селектор дескриптора сегмента нового процесса,
+                            автоматически сохраняется старый аппаратный
+                            контекст и загружается новый из сегмента
+                            состояния задачи TSS
+                            \item В версии 2.6: пошаговое переключение
+                            выполняемое с помощью последовательности
+                            инструкций mov, обеспечивается строгий контроль
+                            допустимости загружаемых данных
+                            \item Время переключения приблизительно одинаково
+                        \end{spacing}
+                        \end{tiny}
+                    \end{itemize}
+                \begin{spacing}{1.0}
+                    \item Сохранение и загрузка регистров FPU, MMX, XMM
+                \end{spacing}
+                \end{tiny}
+            \end{itemize}
+        \end{footnotesize}
+        \end{spacing}
+    \end{itemize}
+\end{frame}
+
+% Слайд Потоки
+\begin{frame}{Потоки}
+    \begin{itemize}
+        \item Переключение между процессами очень длительная задача
+        \item Традиционно у каждого процесса есть адресное пространство и
+        один поток управления
+        \item Возможно добавление в процесс нескольких потоков управления
+        \item Такие потоки управления называются программными потоками
+        или легковесными процессами
+    \end{itemize}
+    \begin{figure}[htp]
+        \centering
+        \begin{tiny}
+            \begin{tabular}{p{4cm}p{4cm}}
+                \hline
+                \textbf{Процесс} & \textbf{Поток} \\ \hline
+                Адресное пространство & Счетчик команд \\
+                Глобальные переменные & Регистры \\
+                Открытые файлы & Стек \\
+                Дочерние процессы &  Состояние \\
+                Действующие аварийные сигналы & \\
+                Сигналы и их обработчики &  \\
+                Учетная информация &  \\
+            \end{tabular}
+        \end{tiny}
+    \end{figure}
+\end{frame}
+
+% Слайд Межпроцессное взаимодействие
+\begin{frame}{Межпроцессное взаимодействие}
+    \begin{itemize}
+        \begin{footnotesize}
+            \item IPC~--- InterProcess Coomunication
+            \item Аспекты проблемы
+            \begin{itemize}
+                \begin{footnotesize}
+                \item Передача информации между процессами
+                \item Контроль над деятельностью процессов (гарантия, что
+                процессы не пересекутся в критических ситуация)
+                \item Согласование действий процессов
+                \end{footnotesize}
+            \end{itemize}
+            \item Для обмена информацией между процессам можно использовать
+            общую память, файлы и т.п.
+            \item Необходимо предусматривать взаимное исключение~--- запрет
+            одновременной записи и чтения совместно используемых данных более
+            чем одним процессом (если один процесс использует общие данные,
+            другому процессу это запрещено)
+            \item Критическая область (секция)~--- часть программы, в которой
+            есть обращение к совместно используемым данным
+            \item Задача: избежать нахождение двух процессов в критических
+            областях
+        \end{footnotesize}
+    \end{itemize}
+\end{frame}
+
+% Слайд Взаимное исключение с активным ожиданием
+\begin{frame}[containsverbatim]{Взаимное исключение с активным ожиданием}
+    \begin{itemize}
+        \item Запрещение прерываний (при входе в критическую область)
+        \item Добавление переменных блокировки: возникает проблема атомарной
+        проверки и изменения такой переменной
+        \item Строгое чередование (переменная отслеживает, чья очередь войти
+        в критическую область)
+    \end{itemize}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+        \begin{footnotesize}
+        \begin{verbatim}
+    /* Процесс 1 */
+    while(TRUE){
+        while(turn!=0)
+        critical_region();
+        turn=1;
+        noncritical_region();
+    }
+        \end{verbatim}
+        \end{footnotesize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{footnotesize}
+                \begin{verbatim}
+    /* Процесс 2 */
+    while(TRUE){
+        while(turn!=1)
+        critical_region();
+        turn=0;
+        noncritical_region();
+    }
+                \end{verbatim}
+                \end{footnotesize}
+                \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд Алгоритм Петерсона
+\begin{frame}[containsverbatim]{Алгоритм Петерсона}
+    \begin{itemize}
+        \item 1981, Гарри Петерсон существенно улучшил программный алгоритм
+        контроля входа в критическую секцию
+        \item Без строгого чередования
+    \end{itemize}
+    \begin{tiny}
+        \begin{verbatim}
+#define FALSE 0
+#define TRUE 1
+#define N 2                                                 // Количество процессов
+int turn;                                                   // Чья очередь
+int interested[N] = {0};                                    // Индикатор "интереса" критической областью
+
+void enter_region(int process)
+{
+    int other;
+    other = 1 - process;                                    // Номер другого процесса
+    interested[process] = TRUE;
+    turn = process;                                         // Занимаем очередь
+    while (turn == process && interested[other] == TRUE);   // Пустой цикл
+    /* вход в критическую секцию осуществлён */
+}
+
+void leave_region(int process)                              // Покидание критической секции
+{
+    interested[process] = FALSE;
+}
+        \end{verbatim}
+        \end{tiny}
+\end{frame}
+
+% Слайд Алгоритм Петерсона, последовательный вход в секцию
+\begin{frame}[containsverbatim]{Алгоритм Петерсона, последовательный вход в секцию}
+    \begin{columns}
+        \begin{column}{0.32\textwidth}
+            \begin{tiny}
+                \begin{verbatim}
+#define FALSE 0
+#define TRUE 1
+#define N 2
+int turn;
+int interested[N] = {0};
+
+void enter_region(int process)
+{
+    int other;
+    other = 1 - process;
+    interested[process] = TRUE;
+    turn = process;
+    while (turn == process && interested[other] == TRUE);
+}
+
+void leave_region(int process)
+{
+    interested[process] = FALSE;
+}
+                \end{verbatim}
+            \end{tiny}
+        \end{column}
+        \begin{column}{0.68\textwidth}
+            \begin{figure}[htp]
+                \centering
+                \begin{tiny}
+                    \begin{tabular}{p{0.5cm}|p{2.4cm}|p{2.4cm}}
+                        \hline
+                        \textbf{Время} & \textbf{Поток 0} & \textbf{Поток 0} \\ \hline
+                        $t_{1}$ & int other = 1; & \\ \hline
+                        $t_{2}$ & interested[0] = TRUE; & \\ \hline
+                        $t_{3}$ & turn = 0; &   \\ \hline
+                        $t_{4}$ & while (turn == 0 \&\& interested[1]); & \\ \hline
+                        $t_{5}$ & \multirow{5}{=}{Критическая секция} & int other = 0; \\ \cline{1-1}\cline{3-3}
+                        $t_{6}$ & & interested[1] = TRUE \\ \cline{1-1}\cline{3-3}
+                        $t_{7}$ & & turn = 1; \\ \cline{1-1}\cline{3-3}
+                        $t_{8}$ & & while (turn == 1 \&\& interested[0]); \\ \cline{1-1}\cline{3-3}
+                        $t_{9}$ & & while (turn == 1 \&\& interested[0]); \\ \hline
+                        $t_{10}$ & interested[0] = FALSE & \\ \hline
+                        $t_{11}$ & & \multirow{2}{=}{Критическая секция} \\ \cline{1-2}
+                        $t_{12}$ & & \\ \hline
+                        $t_{13}$ & & interested[1] = FALSE \\ \hline
+                    \end{tabular}
+                \end{tiny}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+% Слайд Алгоритм Петерсона, попытка одновременного входа в секцию
+\begin{frame}[containsverbatim]{Алгоритм Петерсона, попытка одновременного входа в секцию}
+    \begin{columns}
+        \begin{column}{0.32\textwidth}
+            \begin{tiny}
+                \begin{verbatim}
+#define FALSE 0
+#define TRUE 1
+#define N 2
+int turn;
+int interested[N] = {0};
+
+void enter_region(int process)
+{
+    int other;
+    other = 1 - process;
+    interested[process] = TRUE;
+    turn = process;
+    while (turn == process && interested[other] == TRUE);
+}
+
+void leave_region(int process)
+{
+    interested[process] = FALSE;
+}
+                \end{verbatim}
+            \end{tiny}
+        \end{column}
+        \begin{column}{0.68\textwidth}
+            \begin{figure}[htp]
+                \centering
+                \begin{tiny}
+                    \begin{tabular}{p{0.5cm}|p{2.4cm}|p{2.4cm}}
+                        \hline
+                        \textbf{Время} & \textbf{Поток 0} & \textbf{Поток 0} \\ \hline
+                        $t_{1}$ & int other = 1; & \\ \hline
+                        $t_{2}$ & & int other = 0; \\ \hline
+                        $t_{3}$ &  & interested[1] = TRUE;   \\ \hline
+                        $t_{4}$ & interested[0] = TRUE; & \\ \hline
+                        $t_{5}$ & turn = 0; & \\ \hline
+                        $t_{6}$ & & turn = 1; \\ \hline
+                        $t_{7}$ & & while (turn == 1 \&\& interested[0]); \\ \hline
+                        $t_{8}$ & & while (turn == 1 \&\& interested[0]); \\ \hline
+                        $t_{9}$ & while (turn == 0 \&\& interested[1]); & \\ \hline
+                        $t_{10}$ & \multirow{3}{=}{Критическая секция} & while (turn == 1 \&\& interested[0]); \\ \cline{1-1}\cline{3-3}
+                        $t_{11}$ & & while (turn == 1 \&\& interested[0]); \\ \cline{1-1}\cline{3-3}
+                        $t_{12}$ & & while (turn == 1 \&\& interested[0]); \\ \hline
+                        $t_{13}$ & interested[0] = FALSE; & \\ \hline
+                        $t_{14}$ & & \multirow{2}{=}{Критическая секция} \\ \cline{1-2}
+                        $t_{15}$ & & \\ \hline
+                        $t_{16}$ & & interested[1] = FALSE \\ \hline
+                    \end{tabular}
+                \end{tiny}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Слайд Аппаратная реализация взаимного исключения
+\begin{frame}[containsverbatim]{Аппаратная реализация взаимного исключения}
+    \begin{itemize}
+        \begin{footnotesize}
+        \item Реализуется с помощью команды \textbf{TSL} (Test and Set Lock)
+        \item В регистр считывается значение ячейки памяти, а в ячейке
+        сохраняется ненулевое число, регистр и адрес ячейки передаются
+        в качестве параметров инструкции
+        \item Атомарная операция, в время её выполнения не может
+        произойти переключения контекста
+        \item Пример:
+        \begin{itemize}
+            \begin{footnotesize}
+            \item \textbf{REGISTER}~--- имя регистра для хранения промежуточного значения
+            \item \textbf{LOCK}~--- ячейка памяти, общая для процессов, желающих
+            войти в критическую секцию
+            \end{footnotesize}
+        \end{itemize}
+        \end{footnotesize}
+    \end{itemize}
+    \begin{tiny}
+        \begin{verbatim}
+enter_region;
+    TSL REGISTER, LOCK
+    CMP REGISTER, #0
+    JNE enter_region        // Если в ячейке было ненулевое значение,
+                            // значит какой-то процесс заблокировал вход в критическую секцию
+    RET
+
+leave_region:
+    MOVE LOCK, #0
+    RET
+        \end{verbatim}
+    \end{tiny}
+\end{frame}
+
+% Слайд Аппаратная реализация взаимного исключения - спинлок
+\begin{frame}[containsverbatim]{Аппаратная реализация взаимного исключения - спинлок}
+    \begin{itemize}
+        \begin{footnotesize}
+            \item Spinlock (циклическая блокировка)~--- низкоуровневый
+            примитив синхронизации, применяемый для реализации взаимного
+            исключения
+            \item Представляет собой переменную в памяти и реализуется
+            на атомарных операциях, которые должны присутствовать в
+            системе команд процессора
+            \item Пример для x86: инструкция xchg производит обмен
+            содержимого двух операндов
+        \end{footnotesize}
+    \end{itemize}
+    \begin{tiny}
+        \begin{verbatim}
+mov eax, spinlock_address
+mov ebx, SPINLOCK_BUSY
+
+wait_cycle:
+xchg [eax], ebx
+cpm ebx, SPINLOCK_FREE
+jnz wait_cycle
+
+; < начало критической секции
+
+mov eax, spinlock_address
+mov ebx, SPINLOCK_FREE
+xchg [eax], ebx
+        \end{verbatim}
+    \end{tiny}
+\end{frame}
+
+% Слайд Cемафоры
+\begin{frame}{Cемафоры}
+    \begin{spacing}{0.9}
+    \begin{itemize}
+        \begin{footnotesize}
+            \item Алгоритмы активного ожидания:
+            \begin{itemize}
+            \begin{footnotesize}
+                \item расходуют ресурсы процессора
+                \item возможна инверсия приоритетов: задача с высоким
+                приоритетом выполнения ждет освобождения критической
+                секции у задачи с низким приоритетом
+            \end{footnotesize}
+            \end{itemize}
+            \item Существуют примитивы, блокирующие процесс в случае
+            запрета входа в критическую секцию
+            \item \textbf{sleep}~--- системный вызов, блокирующий процесс
+            \item \textbf{wakeup}~--- пробудить процесс
+            \item 1965 год: Дейсктра предложил обобщение этих примитивов,
+            предложив новый тип переменной <<семафор>>
+            \item Значение семафора может быть нулем или положительным
+            числом
+            \item Над семафорами возможны две операции:
+            \begin{itemize}
+            \begin{footnotesize}
+                \item \textbf{down}: сравнивает значение семафора с нулем.
+                Если значение больше нуля, оно уменьшается на единицу,
+                иначе процесс блокируется
+                \item \textbf{up}: увеличивает значение семафора. Если с
+                этим семафором связаны заблокированные (ожидающие) процессы,
+                происходит пробуждение одного из них
+            \end{footnotesize}
+            \end{itemize}
+            \item Операции \textbf{down} и \textbf{up} атомарны
+        \end{footnotesize}
+    \end{itemize}
+    \end{spacing}
+\end{frame}
+
+% Слайд Мьютексы
+\begin{frame}{Мьютексы}
+    \begin{itemize}
+    \begin{footnotesize}
+        \item Мьютексы~--- упрощенная версия семафора
+        \item Без подсчета, только для управления взаимными
+        исключениями
+        \item Мьютекс~--- переменная, которая может находиться в
+        одном из двух состояний: заблокирована / свободна
+        \item Над мьютексами возможны две операции:
+        \begin{itemize}
+            \begin{footnotesize}
+            \item \textbf{mutex\_lock}: проверяет, заблокирован ли мьютекс
+            и блокирует его, иначе процесс «засыпает»
+            \item \textbf{mutex\_unlock}: разблокирует мьютекс и передает
+            управление заблокированному процессу, связанному с этим
+            мьютексом (если такой есть)
+            \end{footnotesize}
+        \end{itemize}
+        \item Операции \textbf{mutex\_lock} и \textbf{mutex\_unlock} атомарны
+        \item Используется для управления взаимными исключениями в
+        потоках
+    \end{footnotesize}
+    \end{itemize}
+\end{frame}
+
+% Слайд Мониторы
+\begin{frame}[containsverbatim]{Мониторы}
+    \begin{spacing}{1}
+    \begin{itemize}
+        \begin{tiny}
+        \item Использование примитивов~--- сложный процесс,
+        возможно появление трудно обнаружимых ошибок
+        \item Монитор~--- примитив синхронизации высокого уровня
+        \item Монитор~--- набор процедур, переменных и других
+        структур данных, объединенных в особый модуль или пакет
+        \item Процессы могут вызывать процедуры монитора, но у процедур
+        вне монитора нет доступа ко внутренним структурам данных
+        монитора
+        \item Свойство монитора: при обращении к монитору активным
+        может быть только один процесс
+        \item Обычно при вызове монитора первые несколько команд
+        проверяют, нет ли в мониторе активных процессов
+        \item Бринч Ханcен, Чарльз Хоар
+        \end{tiny}
+    \end{itemize}
+    \end{spacing}
+    \begin{tiny}
+        \begin{verbatim}
+            monitor account {
+                int balance := 0
+
+                function withdraw(int amount){
+                    if amount <0 then error "Отрицательный счет"
+                    else if balance < amount the error "Недостаточно средств"
+                    else balance := balance - amount
+                }
+                function deposit(int amount){
+                    if amount < 0 then error "Отрицательная сумма"
+                    else balance := balance + amount
+                }
+            }
+        \end{verbatim}
+    \end{tiny}
+\end{frame}
+
+% Слайд Передача сообщений
+\begin{frame}{Передача сообщений}
+    \begin{itemize}
+        \item Рассмотренные примитивы не применимы в распределенных системах
+        \item Вариант: передача сообщений
+        \begin{itemize}
+            \item send (destination, message): посылает сообщение приемнику
+            \item recieve(source, message): получает сообщение от источника
+        \end{itemize}
+        \item Проблемы:
+        \begin{itemize}
+            \item Подтверждение приема
+            \item Аутентификация
+            \item Производительность
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+% Слайд Барьеры
+\begin{frame}{Барьеры}
+    \begin{itemize}
+        \begin{footnotesize}
+        \item Барьер~--- метод синхронизации в распределённых вычислениях, при
+        котором выполнение параллельного алгоритма или его части можно
+        разделить на несколько этапов, разделённых барьерами
+        \item Идея заключается в том, чтобы в определенной точке ожидания
+        собралось заданное число потоков управления
+        \item Функции
+        \begin{itemize}
+            \begin{footnotesize}
+            \item Инициализация и удаление (разрушение) барьеров
+            \item Синхронизация на барьере
+            \item Инициализация и удаление (разрушение) атрибутных объектов
+            барьеров
+            \item Опрос и установка атрибутов барьеров
+            \end{footnotesize}
+        \end{itemize}
+        \item Когда у барьера собирается заданное число потоков, одному из них
+        передается именованная константа, а другим~--- нули
+        \item После этого барьер возвращается в начальное (инициализированное)
+        состояние, а выделенный поток может выполнить соответствующие
+        объединительные действия.
+        \end{footnotesize}
+    \end{itemize}
+\end{frame}
+
+\end{document}
