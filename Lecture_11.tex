@@ -1,0 +1,500 @@
+\documentclass[aspectratio=169,14pt]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[main=russian,english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[labelformat=empty]{caption}
+% \usepackage{listings}
+\usepackage{multimedia}
+\usepackage{xcolor}
+% \usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{verbatim}
+\usepackage{multirow}
+
+\usetheme{Singapore}
+
+\definecolor{urlcolor}{HTML}{799B03} % цвет гиперссылок
+\hypersetup{urlcolor=urlcolor, colorlinks=true}
+
+\graphicspath{{../Images/}}
+
+\title{Управление памятью}
+
+\begin{document}
+
+% Слайд Управление памятью
+\begin{frame}{Управление памятью}
+    \begin{spacing}{0.9}
+    \begin{itemize}
+        \item Память~--- важнейший ресурс ЭВМ, требующий тщательного
+        управления
+        \item Иерархия памяти
+        \begin{itemize}
+            \item регистры
+            \item кэш-память
+            \item ОЗУ
+            \item внешняя память
+        \end{itemize}
+        \item Менеджер памяти (модуль управления памятью)~--- часть
+        ОС, отвечающая за управление памятью
+        \begin{itemize}
+            \item Следит, какая часть памяти используется,
+            а какая свободна
+            \item Выделяет/освобождает память для процессов
+            \item Управляет обменом память-диск
+        \end{itemize}
+        \item Типы менеджеров памяти:
+        \begin{itemize}
+            \item Без перемещения (без использования внешней памяти)
+            \item С перемещением
+        \end{itemize}
+    \end{itemize}
+    \end{spacing}
+\end{frame}
+
+% Слайд Однозадачная система без подкачки на диск
+\begin{frame}{Однозадачная система без подкачки на диск}
+    \begin{itemize}
+        \item В каждый момент времени работает только
+        одна программа
+        \item Память разделяется между ОС и программой
+        \item При запуске программы ОС копирует её с диска
+        в память и передает ей управление. По окончании загружает
+        другую программу поверх первой.
+
+        \includegraphics[height=4.2cm, keepaspectratio]{OSMemorySingleTask.png}
+    \end{itemize}
+\end{frame}
+
+% Слайд Многозадачная система c фиксированными разделами
+\begin{frame}{Многозадачная система c фиксированными разделами}
+    \begin{footnotesize}
+    \begin{spacing}{0.8}
+    \begin{itemize}
+        \item Память разделяется на несколько разделов, возможно
+        разного размера
+        \begin{itemize}
+        \begin{tiny}
+            \item общая очередь процессов ко всем разделам
+            \item отдельные очереди к разделам
+        \end{tiny}
+        \end{itemize}
+        \item Недостаток нескольких очередей~--- возможное простаивание
+        раздела
+        \item Алгоритмы планирования в случае одной очереди:
+        \begin{itemize}
+            \begin{tiny}
+            \begin{spacing}{0.8}
+            \item первый пришел~--- первый обслужен, циклический
+            \item выбирается задача, которая максимальной займет раздел;
+            выбор осуществляется при освобождении раздела; возможна
+            дискриминация <<небольших>> задач (решение~--- выделение
+            специального раздела <<небольшого>> раздела).
+            \end{spacing}
+            \end{tiny}
+        \end{itemize}
+        \item OS/MFT (Multiprogramming with Fixed number Tasks)
+        \includegraphics[height=2.6cm, keepaspectratio]{OSMemoryFixedPartitions.png}
+    \end{itemize}
+    \end{spacing}
+    \end{footnotesize}
+\end{frame}
+
+% Слайд Многозадачная система с динамическим разделами
+\begin{frame}{Многозадачная система с динамическим разделами}
+    \begin{footnotesize}
+    \begin{spacing}{0.8}
+    \begin{itemize}
+        \item Недостатки фиксированных разделов:
+        \begin{itemize}
+            \begin{footnotesize}
+            \item ограничение на количество задач;
+            \item неэффективное использование в случае небольших задач.
+            \end{footnotesize}
+        \end{itemize}
+        \item Решение: динамическое количество разделов переменного размера
+        \begin{itemize}
+            \begin{footnotesize}
+            \item изначально вся память пуста (кроме занятой ОС)
+            \item процессы последовательно загружаются в память, начиная
+            с адреса после ОС
+            \end{footnotesize}
+        \end{itemize}
+        \item Недостаток: фрагментация~--- наличие большого числа небольших
+        разделов, в которые не умещается процесс. Решается с помощью
+        уплотнения (перемещение всех занятых участков, чтобы свободная
+        память образовывала единую область) (трудоемкая задача)
+    \end{itemize}
+    \begin{figure}[htp]
+        \centering
+        \includegraphics[height=2.6cm, keepaspectratio]{OSMemoryDynamicPartitions.png}
+    \end{figure}
+    \end{spacing}
+    \end{footnotesize}
+
+\end{frame}
+
+% Слайд Многозадачная система с динамическим разделами: рост разделов
+\begin{frame}{Многозадачная система с динамическим разделами: рост разделов}
+    \begin{itemize}
+        \item Возможна ситуация, когда процессу нужен дополнительный
+        объем памяти
+        \item Возможное решение:
+        \begin{itemize}
+            \item заранее выделять больше места
+            \item расширять раздел, если нет возможности для
+            расширения~--- перемещать в новый раздел
+        \end{itemize}
+        \includegraphics[height=3.2cm, keepaspectratio]{OSMemoryGrowPartitions.png}
+    \end{itemize}
+\end{frame}
+
+% Слайд Дополнительные задачи ОС
+\begin{frame}{Дополнительные задачи ОС}
+    \begin{footnotesize}
+    \begin{itemize}
+        \item Использование сложных моделей размещения процессов в памяти
+        ставит перед ОС дополнительные задачи:
+        \begin{itemize}
+            \begin{footnotesize}
+            \item настройка адресов
+            \item защита адресного пространства
+            \end{footnotesize}
+        \end{itemize}
+        \item Глобальное решение: оснащение процессора специальными
+        регистрами
+        \begin{itemize}
+            \begin{footnotesize}
+            \item базовый (указывает на начало адресного пространства процесса)
+            \item предельный (указывает конец или размер адресного
+            пространства процесса)
+            \end{footnotesize}
+        \end{itemize}
+        \includegraphics[height=3.6cm, keepaspectratio]{OSMemoryAddressSetup.png}
+    \end{itemize}
+    \end{footnotesize}
+\end{frame}
+
+% Слайд Учет свободной памяти: битовые массивы
+\begin{frame}{Учет свободной памяти: битовые массивы}
+    \begin{itemize}
+        \item Вся память разбивается на блоки
+        \item Выделяется специальный массив, в котором каждый бит означает,
+        что соответствующий по порядку блок занят (значение~1) или свободен
+        (значение~0)
+        \item При выделении памяти происходит поиск последовательности
+        нулей нужной длины
+        \item Недостаток~--- долгий поиск (искомая последовательность может
+        пересекать границы слов и нужно многократное сравнение слов)
+    \end{itemize}
+    \begin{figure}[htp]
+        \centering
+        \includegraphics[height=1.2cm, keepaspectratio]{OSMemoryBitsArray.png}
+    \end{figure}
+\end{frame}
+
+% Слайд Учет свободной памяти: связные списки
+\begin{frame}{Учет свободной памяти: связные списки}
+
+    \begin{footnotesize}
+        \begin{itemize}
+            \item Создается список, каждый элемент которого содержит
+            \begin{itemize}
+                \begin{footnotesize}
+                \item признак занят (P) или свободен (H) фрагмент
+                памяти
+                \item адрес начала фрагмента
+                \item длина фрагмента
+                \end{footnotesize}
+            \end{itemize}
+            \item Алгоритмы выделения блока памяти:
+            \begin{itemize}
+            \begin{footnotesize}
+                \item первый подходящий участок
+                \item следующий подходящий участок, стартует не с
+                начала списка, а с того места, на котором остановились
+                в предыдущий раз (немного медленнее, показало
+                моделирование)
+                \item самый подходящий участок (медленнее, сильная
+                фрагментация маленькими фрагментами)
+                \item самый неподходящий участок, расчет на наличие больших
+                остатков (моделирование показало, что работает не очень
+                хорошо)
+            \end{footnotesize}
+            \end{itemize}
+            \includegraphics[height=1cm, keepaspectratio]{OSMemoryPH.png}
+        \end{itemize}
+    \end{footnotesize}
+\end{frame}
+
+% Слайд Использование внешней памяти
+\begin{frame}{Использование внешней памяти}
+    \begin{itemize}
+        \item Часто возникают ситуации, когда процесс надолго занят операцией
+        ввода/вывода. В этом случае целесообразно выгрузить его во внешнюю
+        память, освободив ОЗУ
+        \item Своппинг (подкачка)~--- процесс целиком выгружается/загружается
+        на диск (во внешнюю память)
+        \item Виртуальная память~--- процесс частично может быть загружен в
+        память
+    \end{itemize}
+    \begin{figure}[htp]
+        \centering
+        \includegraphics[height=2.9cm, keepaspectratio]{OSMemorySwapping.png}
+    \end{figure}
+\end{frame}
+
+% Слайд Виртуальная память: страничная организация
+\begin{frame}{Виртуальная память: страничная организация}
+    \begin{footnotesize}
+    \begin{itemize}
+        \item Страничная организация памяти~--- способ реализации виртуальной
+        памяти
+        \item Страницы~--- части, на которые разбивается пространство
+        виртуальных адресов
+        \item Страничные блоки~--- единицы физической памяти
+        \item Страницы имеют фиксированный размер. Передача между ОЗУ и
+        диском осуществляется в страницах.
+        \item Страничное прерывание~--- происходит, если процесс обратился к
+        странице, которая не загружена в ОЗУ
+    \end{itemize}
+    \end{footnotesize}
+    \begin{figure}[htp]
+        \centering
+        \includegraphics[height=3.4cm, keepaspectratio]{OSMemoryVirtualPhysicalAddresses.png}
+    \end{figure}
+\end{frame}
+
+% Слайд Таблицы страниц
+\begin{frame}{Таблицы страниц}
+    \begin{itemize}
+        \item Таблицы страниц используются для хранения соответствия
+        адресов виртуальной страницы и страничного блока
+        \item Таблица страниц может быть размещена:
+        \begin{itemize}
+            \item в ОЗУ (дешево, долго);
+            \item в аппаратных регистрах (буфер быстрого преобразования,
+            TLB: translation lookaside buffer).
+        \end{itemize}
+   \end{itemize}
+   \begin{figure}[htp]
+    \centering
+    \includegraphics[width=13cm, keepaspectratio]{OSMemoryPageTableRecord.png}
+    \end{figure}
+\end{frame}
+
+% Слайд Использование таблицы страниц
+\begin{frame}{Использование таблицы страниц}
+    Пример использования таблицы страниц в системе из 16 страниц по 4Кб
+    \begin{figure}[htp]
+        \centering
+        \includegraphics[height=6cm, keepaspectratio]{OSMemorySimpePageTableUse.png}
+    \end{figure}
+\end{frame}
+
+% Слайд Многоуровневые таблицы страниц
+\begin{frame}{Многоуровневые таблицы страниц}
+    Многоуровневые таблицы используются для решения проблемы
+    большого размера таблицы страниц
+    \begin{figure}[htp]
+        \centering
+        \includegraphics[height=6cm, keepaspectratio]{OSMemoryTwoLevelPageTable.png}
+    \end{figure}
+\end{frame}
+
+% Слайд TLB
+\begin{frame}{TLB}
+    \begin{footnotesize}
+    \begin{itemize}
+        \item Буфер быстрого преобразования используется для повышения
+        быстродействия преобразования виртуального адреса в физический
+        \item Используется ассоциативный доступ (поиск одновременно во
+        всех ячейках TLB)
+    \end{itemize}
+    \end{footnotesize}
+    \begin{figure}[htp]
+        \centering
+        \includegraphics[height=4.4cm, keepaspectratio]{OSMemoryTLB.png}
+        \includegraphics[height=4.4cm, keepaspectratio]{OSMemoryTLBOnly.png}
+    \end{figure}
+\end{frame}
+
+% Слайд Алгоритмы замещения страниц
+\begin{frame}{Алгоритмы замещения страниц}
+    \begin{itemize}
+        \item Во время возникновения ошибки отсутствия страниц операционная
+        система должна выбрать страницу для удаления, чтобы освободить место
+        для затребованной страницы
+        \item Произвольный выбор страницы для удаления приводит к
+        существенному снижению производительности
+        \item Оптимальный алгоритм замещения:
+        \begin{itemize}
+            \item каждая страница помечается количеством команд, которые
+            должны быть выполнены до обращения к этой странице
+            \item выгружается страница с максимальной меткой.
+        \end{itemize}
+        \item Алгоритм нереализуем, поскольку неизвестно, когда произойдет
+        обращение к странице
+    \end{itemize}
+\end{frame}
+
+% Слайд Алгоритм NRU
+\begin{frame}{Алгоритм NRU}
+    \begin{spacing}{0.9}
+    \begin{itemize}
+        \item \textbf{NRU} (Not Recently Used)~--- не использовавшаяся в
+        последнее время
+        \item Идея: если страница не использовалась в последнее время,
+        значит, она не будет использоваться в дальнейшем
+        \item Для каждой страницы устанавливаются два бита
+        \begin{itemize}
+            \item $R = 1$, если было чтение из страницы; периодически $R$
+            обнуляется
+            \item $M = 1$, если была модификация страницы
+        \end{itemize}
+        \item Все страницы делятся на 4 класса:
+        \begin{itemize}
+            \item класс 0: не было обращений и изменений ($R=0, M=0$)
+            \item класс 1: обращений не было, страница изменена ($R=0, M=1$)
+            \item класс 2: обращение было, страница не изменена ($R=1, M=0$)
+            \item класс 3: было обращение, страница изменена ($R=1, M=1$)
+        \end{itemize}
+        \item Выбирается произвольная страница из непустого минимального
+        класса
+    \end{itemize}
+    \end{spacing}
+\end{frame}
+
+% Слайд Алгоритм FIFO
+\begin{frame}{Алгоритм FIFO}
+    \begin{itemize}
+        \item \textbf{FIFO} (First in~--- first out)~--- первым пришел, первым ушел
+        \item Идея: если страница <<старая>>, то к ней не было и не будет
+        обращений
+        \item Поддерживается список всех страниц, удаляется первая из этого
+        списка
+        \item Недостаток: можно удалить часто используемую страницу
+    \end{itemize}
+\end{frame}
+
+% Слайд Алгоритм «второй шанс»
+\begin{frame}{Алгоритм <<второй шанс>>}
+    \begin{itemize}
+        \item Идея: если страница <<старая>>, то к ней не было и не будет
+        обращений; дополнительно проверятся бит $R$
+        \item Если $R = 0$, страница удаляется
+        \item Если $R = 1$, $R$ обнуляется и страница попадает в конец
+        списка (обновляется время ее загрузки)
+        \includegraphics[height=3.6cm, keepaspectratio]{OSMemorySecondChance.png}
+    \end{itemize}
+\end{frame}
+
+% Слайд Алгоритм часов
+\begin{frame}{Алгоритм часов}
+    \begin{itemize}
+        \item Алгоритм <<второй шанс>> не эффективен, требует модификации
+        списка
+        \item Идея: страницы хранятся к кольцевом списке и добавляется
+        указатель на текущую страницу~--- кандидат для удаления
+        \item По сути, отличается от <<второго шанса>> реализацией
+        \includegraphics[height=3.8cm, keepaspectratio]{OSMemoryClock.png}
+    \end{itemize}
+\end{frame}
+
+% Слайд Алгоритм LRU
+\begin{frame}{Алгоритм LRU}
+    \begin{spacing}{0.8}
+    \begin{footnotesize}
+    \begin{itemize}
+        \item LRU (Least Recently Used)~--- дольше всего не использовавшаяся
+        страница
+        \item Идея: страницы, к которым ранее не было обращений, не потребуются
+        в дальнейшем
+        \item Реализуем, но трудоемок:
+        \begin{itemize}
+            \begin{tiny}
+            \item либо поддерживать список страниц в нужном порядке
+            \item либо использовать аппаратный счетчик, который увеличивается
+            после каждой команды
+            \end{tiny}
+        \end{itemize}
+        \item Вариант аппаратной реализации: матрица обращения
+        \begin{itemize}
+            \begin{tiny}
+            \item для $n$ страниц используется матрица $n*n$
+            \item при доступе к страничному блоку $k$ всей $k$-ой строке
+            присваиваются единицы, а $k$-му столбцу присваиваются нули
+            \item строка с наименьшим двоичным значением является дольше
+            всего неиспользуемой
+            \end{tiny}
+        \end{itemize}
+        \includegraphics[height=3cm, keepaspectratio]{OSMemoryLRUMatrix.png}
+    \end{itemize}
+    \end{footnotesize}
+    \end{spacing}
+\end{frame}
+
+% Слайд Модель рабочего набора
+\begin{frame}{Модель рабочего набора}
+    \begin{tiny}
+    \begin{spacing}{0.4}
+    \begin{itemize}
+        \item В момент запуска процесса нужны страницы отсутствуют в памяти
+        \item Через некоторое время в памяти скапливается достаточное
+        количество необходимых процессу страниц и он начинает работать с
+        небольшим количеством страничных прерываний
+        \item Процессы характеризуются локальностью обращений, во время
+        выполнения любой фазы процесс обращается к небольшой части
+        собственных страниц
+        \item Множество страниц, которое процесс использует в данный момент,
+        называется рабочим набором
+        \item Системы замещения страниц пытаются отслеживать рабочий набор
+        процесса и обеспечивают его нахождение в памяти еще о запуска
+        процесса~--- модель рабочего процесса
+        \item $k$~--- количество обращений к памяти. Пусть для каждого
+        момента времени $t$ есть набор, включающий все страницы,
+        $к$ которым было $k$ последних обращений к памяти
+        \item $w(k,t)$~--- рабочий набор
+        \includegraphics[width=11cm, keepaspectratio]{OSMemoryWorkSet.png}
+    \end{itemize}
+    \end{spacing}
+    \end{tiny}
+\end{frame}
+
+% Слайд Модель рабочего набора: wsclock
+\begin{frame}{Модель рабочего набора: wsclock}
+    \begin{footnotesize}
+    \begin{itemize}
+        \item Из-за асимптотического поведения $w(k,t)$ содержимое рабочего
+        набора нечувствительно к значению $k$; существует большое количество
+        значений $k$, при которых рабочие наборы одинаковы
+        \item Для реализации механизмов рабочего набора операционная
+        система должна отслеживать, какие страницы в нем находятся
+        \item Возможная реализация~--- использовать механизм <<старения>>
+        страниц
+        \begin{itemize}
+            \begin{footnotesize}
+            \item у каждой страницы есть счетчик нахождения в памяти (время
+            последнего использования)
+            \item старший бит счетчика может означать присутствие страницы в
+            рабочем наборе
+            \item если за $n$ последовательных тактов обращения к странице не
+            происходит, она убирается из рабочего набора
+            \end{footnotesize}
+        \end{itemize}
+        \item \textbf{wsclock}~--- алгоритм <<часы>> с дополнительной проверкой
+        присутствия страницы в рабочем наборе
+    \end{itemize}
+    \end{footnotesize}
+\end{frame}
+
+% Слайд Linux 2.6 Алгоритм PFRA, логика утилизации
+\begin{frame}{Linux 2.6 Алгоритм PFRA, логика утилизации}
+    \begin{figure}[htp]
+        \centering
+        \includegraphics[height=7cm, keepaspectratio]{OSMemoryPFRAUtilizationLogic.png}
+    \end{figure}
+\end{frame}
+
+\end{document}
